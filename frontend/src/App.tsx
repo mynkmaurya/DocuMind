@@ -111,7 +111,7 @@ export const App: React.FC = () => {
       .catch((err: Error) => setErrorMessage(err.message));
   }, [activeConvId]);
 
-  // 5. Auto scroll chat on update
+  // 5. Smooth auto scroll chat on update
   useEffect(() => {
     if (messages.length > 0) {
       chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -283,11 +283,11 @@ export const App: React.FC = () => {
       {/* ==================================================================== */}
       <nav
         aria-label="Navigation dock"
-        className="hidden md:flex flex-col justify-between items-center py-6 px-4 w-20 shrink-0 border-r border-slate-800/80 bg-[#090d16]/70 backdrop-blur-xl z-30"
+        className="hidden md:flex flex-col justify-between items-center py-6 px-4 w-20 shrink-0 border-r border-slate-800/80 bg-[#090d16]/70 backdrop-blur-xl z-30 transition-all duration-300"
       >
         {/* Brand Logo & Top Controls */}
         <div className="flex flex-col items-center gap-6">
-          <div className="font-extrabold text-lg tracking-widest text-white select-none">
+          <div className="font-extrabold text-lg tracking-widest text-white select-none hover:text-sky-400 transition-colors cursor-pointer">
             LIX
           </div>
 
@@ -300,7 +300,7 @@ export const App: React.FC = () => {
                 setViewerPage(null);
               }}
               title="Home / Overview"
-              className="w-10 h-10 rounded-2xl bg-[#0098ea] hover:bg-[#0089d4] text-white flex items-center justify-center shadow-[0_0_15px_rgba(0,152,234,0.4)] transition-all"
+              className="btn-tactile w-10 h-10 rounded-2xl bg-[#0098ea] hover:bg-[#0089d4] text-white flex items-center justify-center shadow-[0_0_18px_rgba(0,152,234,0.45)]"
             >
               <svg
                 className="w-5 h-5"
@@ -322,9 +322,9 @@ export const App: React.FC = () => {
               type="button"
               onClick={() => setShowDocumentsModal((v) => !v)}
               title="Documents & Uploads"
-              className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
+              className={`btn-tactile w-10 h-10 rounded-2xl flex items-center justify-center ${
                 showDocumentsModal
-                  ? "bg-slate-700/80 text-white"
+                  ? "bg-slate-700/80 text-white shadow-[0_0_12px_rgba(255,255,255,0.15)]"
                   : "bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800"
               }`}
             >
@@ -348,9 +348,9 @@ export const App: React.FC = () => {
               type="button"
               onClick={() => setShowHistoryModal((v) => !v)}
               title="Chat History"
-              className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
+              className={`btn-tactile w-10 h-10 rounded-2xl flex items-center justify-center ${
                 showHistoryModal
-                  ? "bg-slate-700/80 text-white"
+                  ? "bg-slate-700/80 text-white shadow-[0_0_12px_rgba(255,255,255,0.15)]"
                   : "bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800"
               }`}
             >
@@ -374,7 +374,7 @@ export const App: React.FC = () => {
               type="button"
               onClick={handleCreateConversation}
               title="Start New Chat"
-              className="w-10 h-10 rounded-2xl bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center transition-all"
+              className="btn-tactile w-10 h-10 rounded-2xl bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center"
             >
               <svg
                 className="w-5 h-5"
@@ -399,7 +399,7 @@ export const App: React.FC = () => {
             type="button"
             onClick={() => setShowToolsModal((v) => !v)}
             title="Settings"
-            className="w-9 h-9 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center justify-center transition-colors"
+            className="btn-tactile w-9 h-9 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center justify-center"
           >
             <svg
               className="w-4 h-4"
@@ -424,7 +424,7 @@ export const App: React.FC = () => {
           {/* User Profile Avatar */}
           <div
             title="Logged in as Hendricks / Mayank"
-            className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 p-0.5 shadow-md select-none cursor-pointer"
+            className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 p-0.5 shadow-md select-none cursor-pointer btn-tactile"
           >
             <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xs font-bold text-sky-300">
               H
@@ -450,15 +450,15 @@ export const App: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowDocumentsModal((v) => !v)}
-            className="p-1.5 rounded-lg border border-slate-700 bg-slate-800/60 text-slate-300 text-xs flex items-center gap-1"
+            className="btn-tactile p-1.5 rounded-lg border border-slate-700 bg-slate-800/60 text-slate-300 text-xs flex items-center gap-1"
           >
             <span>PDFs</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
           </button>
           <button
             type="button"
             onClick={handleCreateConversation}
-            className="p-1.5 rounded-lg bg-sky-500 text-white text-xs font-semibold"
+            className="btn-tactile p-1.5 rounded-lg bg-[#0098ea] text-white text-xs font-semibold shadow-[0_0_10px_rgba(0,152,234,0.4)]"
           >
             + New
           </button>
@@ -471,7 +471,7 @@ export const App: React.FC = () => {
       <main className="flex-1 flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 max-w-6xl mx-auto w-full relative z-10 pb-24 md:pb-8">
         {/* Error Notification Banner */}
         {errorMessage && (
-          <div className="w-full max-w-2xl mx-auto mb-4">
+          <div className="w-full max-w-2xl mx-auto mb-4 animate-fade-in-down">
             <ErrorState
               message={errorMessage}
               onDismiss={() => setErrorMessage(null)}
@@ -479,20 +479,28 @@ export const App: React.FC = () => {
           </div>
         )}
 
-        {/* HERO SECTION: Visible when no conversation has started, or compact above chat */}
+        {/* HERO SECTION: Visible when no conversation has started */}
         {!hasMessages ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center my-auto pt-2 pb-6">
+          <div className="flex-1 flex flex-col items-center justify-center text-center my-auto pt-2 pb-6 animate-fade-in-up">
             {/* The Stunning 3D Iridescent Orb */}
             <div className="mb-6 sm:mb-8">
-              <IridescentOrb size="md" isStreaming={isStreaming} />
+              <IridescentOrb
+                size="md"
+                isStreaming={isStreaming}
+                onClick={() => {
+                  handleSendQuestion(
+                    "Hello! What is this document about and what questions can I ask?"
+                  );
+                }}
+              />
             </div>
 
             {/* Greeting Typography matching the screenshot */}
-            <div className="space-y-1 sm:space-y-2 mb-8">
+            <div className="space-y-1 sm:space-y-2 mb-8 animate-fade-in-up stagger-1">
               <div className="text-xs sm:text-sm font-medium text-slate-400 tracking-wide">
                 Hi, Hendricks
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white drop-shadow-sm">
                 How can I help today?
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto pt-1 leading-relaxed">
@@ -501,7 +509,7 @@ export const App: React.FC = () => {
             </div>
 
             {/* Central Prompter Box */}
-            <div className="w-full max-w-2xl">
+            <div className="w-full max-w-2xl animate-fade-in-up stagger-2">
               <MessageInput
                 disabled={isStreaming}
                 activeDocumentName={selectedDocument?.filename}
@@ -512,7 +520,7 @@ export const App: React.FC = () => {
             </div>
 
             {/* Quick Action Cards Grid (Bottom) matching the screenshot */}
-            <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-8">
+            <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-8 animate-fade-in-up stagger-3">
               {/* Card 1: Surprise me! */}
               <button
                 type="button"
@@ -521,10 +529,10 @@ export const App: React.FC = () => {
                     "Surprise me! Give me key takeaways and unique insights from this document."
                   )
                 }
-                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group"
+                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-base text-slate-200">💬</span>
+                  <span className="text-base text-slate-200 group-hover:scale-110 transition-transform">💬</span>
                   <span className="text-sm font-semibold text-white group-hover:text-sky-300 transition-colors">
                     Surprise me!
                   </span>
@@ -534,7 +542,7 @@ export const App: React.FC = () => {
                 </p>
               </button>
 
-              {/* Card 2: Create image / Inspect Citations */}
+              {/* Card 2: Inspect Citations */}
               <button
                 type="button"
                 onClick={() =>
@@ -542,10 +550,10 @@ export const App: React.FC = () => {
                     "What are the most critical sections and exact page citations in this document?"
                   )
                 }
-                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group"
+                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-base text-slate-200">👤</span>
+                  <span className="text-base text-slate-200 group-hover:scale-110 transition-transform">👤</span>
                   <span className="text-sm font-semibold text-white group-hover:text-sky-300 transition-colors">
                     Inspect citations
                   </span>
@@ -563,10 +571,10 @@ export const App: React.FC = () => {
                     "Summarise this document into clear, concise key points with page references."
                   )
                 }
-                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group"
+                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-base text-slate-200">📑</span>
+                  <span className="text-base text-slate-200 group-hover:scale-110 transition-transform">📑</span>
                   <span className="text-sm font-semibold text-white group-hover:text-sky-300 transition-colors">
                     Summarise
                   </span>
@@ -581,7 +589,7 @@ export const App: React.FC = () => {
           /* ================================================================ */
           /* CHAT CONVERSATION VIEW (Active Stream & Messages)               */
           /* ================================================================ */
-          <div className="flex-1 flex flex-col justify-between max-w-3xl w-full mx-auto">
+          <div className="flex-1 flex flex-col justify-between max-w-3xl w-full mx-auto animate-fade-in-up">
             {/* Top Compact Brand & Document Status Header */}
             <div className="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-4">
               <div className="flex items-center gap-3">
@@ -600,7 +608,7 @@ export const App: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setMessages([])}
-                  className="rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
+                  className="btn-tactile rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs text-slate-300 hover:text-white hover:bg-slate-700"
                 >
                   New Topic
                 </button>
@@ -608,7 +616,7 @@ export const App: React.FC = () => {
             </div>
 
             {/* Chat Messages Stream List */}
-            <div className="flex-1 overflow-y-auto space-y-4 pr-1 mb-4">
+            <div className="flex-1 overflow-y-auto space-y-4 pr-1 mb-4 scroll-smooth">
               {messages.map((message) => (
                 <ChatMessage
                   key={message.id}
@@ -646,14 +654,14 @@ export const App: React.FC = () => {
       {/* ==================================================================== */}
       {/* MOBILE BOTTOM NAVIGATION BAR (< 768px Phones)                        */}
       {/* ==================================================================== */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 border-t border-slate-800 backdrop-blur-xl px-6 py-2.5 flex items-center justify-around">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 border-t border-slate-800 backdrop-blur-xl px-6 py-2.5 flex items-center justify-around shadow-[0_-10px_25px_rgba(0,0,0,0.5)]">
         <button
           type="button"
           onClick={() => {
             setMessages([]);
             setViewerPage(null);
           }}
-          className="flex flex-col items-center gap-1 text-sky-400"
+          className="btn-tactile flex flex-col items-center gap-1 text-sky-400"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -664,7 +672,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowDocumentsModal(true)}
-          className="flex flex-col items-center gap-1 text-slate-400 hover:text-white"
+          className="btn-tactile flex flex-col items-center gap-1 text-slate-400 hover:text-white"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -675,7 +683,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowHistoryModal(true)}
-          className="flex flex-col items-center gap-1 text-slate-400 hover:text-white"
+          className="btn-tactile flex flex-col items-center gap-1 text-slate-400 hover:text-white"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -686,7 +694,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowToolsModal(true)}
-          className="flex flex-col items-center gap-1 text-slate-400 hover:text-white"
+          className="btn-tactile flex flex-col items-center gap-1 text-slate-400 hover:text-white"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -699,8 +707,8 @@ export const App: React.FC = () => {
       {/* DOCUMENT MANAGEMENT MODAL / DRAWER                                   */}
       {/* ==================================================================== */}
       {showDocumentsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-          <div className="w-full max-w-lg rounded-3xl bg-[#0d131f] border border-slate-800 p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fade-in-down">
+          <div className="w-full max-w-lg rounded-3xl bg-[#0d131f] border border-slate-800 p-6 shadow-2xl space-y-5 animate-scale-up">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div>
                 <h3 className="text-base font-bold text-white">
@@ -713,7 +721,7 @@ export const App: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowDocumentsModal(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
+                className="btn-tactile p-1.5 rounded-lg text-slate-400 hover:text-white"
               >
                 ✕
               </button>
@@ -736,9 +744,9 @@ export const App: React.FC = () => {
                   return (
                     <div
                       key={doc.id}
-                      className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
+                      className={`flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 ${
                         isSelected
-                          ? "bg-sky-500/10 border-sky-500/40 text-white"
+                          ? "bg-sky-500/10 border-sky-500/40 text-white shadow-[0_0_15px_rgba(56,189,248,0.15)]"
                           : "bg-[#090d16] border-slate-800 text-slate-300 hover:border-slate-700"
                       }`}
                     >
@@ -749,7 +757,7 @@ export const App: React.FC = () => {
                           setViewerPage(null);
                           setShowDocumentsModal(false);
                         }}
-                        className="flex-1 text-left min-w-0"
+                        className="btn-tactile flex-1 text-left min-w-0"
                       >
                         <div className="text-xs font-semibold truncate">
                           {doc.filename}
@@ -766,7 +774,7 @@ export const App: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleDeleteDocument(doc.id)}
-                        className="ml-3 text-slate-500 hover:text-rose-400 p-1 transition-colors"
+                        className="btn-tactile ml-3 text-slate-500 hover:text-rose-400 p-1.5 rounded-lg transition-colors"
                         title="Delete Document"
                       >
                         🗑
@@ -784,14 +792,14 @@ export const App: React.FC = () => {
       {/* CONVERSATION HISTORY MODAL / DRAWER                                  */}
       {/* ==================================================================== */}
       {showHistoryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-          <div className="w-full max-w-md rounded-3xl bg-[#0d131f] border border-slate-800 p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fade-in-down">
+          <div className="w-full max-w-md rounded-3xl bg-[#0d131f] border border-slate-800 p-6 shadow-2xl space-y-4 animate-scale-up">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h3 className="text-base font-bold text-white">Chat History</h3>
               <button
                 type="button"
                 onClick={() => setShowHistoryModal(false)}
-                className="p-1 text-slate-400 hover:text-white"
+                className="btn-tactile p-1 text-slate-400 hover:text-white"
               >
                 ✕
               </button>
@@ -811,7 +819,7 @@ export const App: React.FC = () => {
                       setActiveConvId(conv.id);
                       setShowHistoryModal(false);
                     }}
-                    className={`w-full text-left p-3 rounded-2xl border text-xs transition-all ${
+                    className={`btn-tactile w-full text-left p-3 rounded-2xl border text-xs transition-all ${
                       conv.id === activeConvId
                         ? "bg-sky-500 text-white font-semibold shadow-lg"
                         : "bg-[#090d16] border-slate-800 text-slate-300 hover:bg-slate-800/50"
@@ -833,8 +841,8 @@ export const App: React.FC = () => {
       {/* TOOLS & SETTINGS MODAL                                               */}
       {/* ==================================================================== */}
       {showToolsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-          <div className="w-full max-w-md rounded-3xl bg-[#0d131f] border border-slate-800 p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fade-in-down">
+          <div className="w-full max-w-md rounded-3xl bg-[#0d131f] border border-slate-800 p-6 shadow-2xl space-y-4 animate-scale-up">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h3 className="text-base font-bold text-white">
                 RAG Engine Settings
@@ -842,7 +850,7 @@ export const App: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowToolsModal(false)}
-                className="p-1 text-slate-400 hover:text-white"
+                className="btn-tactile p-1 text-slate-400 hover:text-white"
               >
                 ✕
               </button>
@@ -856,7 +864,7 @@ export const App: React.FC = () => {
                     Verify against stored chunk metadata
                   </div>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold shadow-[0_0_8px_rgba(52,211,153,0.2)]">
                   Active
                 </span>
               </div>
@@ -868,7 +876,7 @@ export const App: React.FC = () => {
                     Deterministic local n-gram vectors
                   </div>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 font-bold">
+                <span className="px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 font-bold shadow-[0_0_8px_rgba(56,189,248,0.2)]">
                   Auto
                 </span>
               </div>
@@ -880,7 +888,7 @@ export const App: React.FC = () => {
                     800 chars / 150 overlap (Sentence-snapped)
                   </div>
                 </div>
-                <span className="text-slate-400">800/150</span>
+                <span className="text-slate-400 font-mono">800/150</span>
               </div>
             </div>
           </div>

@@ -3,21 +3,27 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-[#06080e] text-slate-100 antialiased selection:bg-sky-500 selection:text-white;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Custom iridescent orb animation & glow */
+/* ============================================================================ */
+/* BUTTERY-SMOOTH GPU-ACCELERATED KEYFRAMES & TRANSITIONS                       */
+/* ============================================================================ */
+
 @keyframes orb-float {
   0%, 100% {
     transform: translateY(0px) scale(1);
-    filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.45)) drop-shadow(0 0 65px rgba(129, 140, 248, 0.35));
+    filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.45)) drop-shadow(0 0 70px rgba(129, 140, 248, 0.35));
   }
   50% {
-    transform: translateY(-6px) scale(1.02);
-    filter: drop-shadow(0 0 45px rgba(56, 189, 248, 0.6)) drop-shadow(0 0 85px rgba(168, 85, 247, 0.45));
+    transform: translateY(-8px) scale(1.025);
+    filter: drop-shadow(0 0 50px rgba(56, 189, 248, 0.65)) drop-shadow(0 0 95px rgba(168, 85, 247, 0.5));
   }
 }
 
@@ -35,23 +41,129 @@
 
 @keyframes orb-pulse-light {
   0%, 100% {
-    opacity: 0.85;
+    opacity: 0.82;
+    transform: scale(1);
   }
   50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-scale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(0);
     opacity: 1;
   }
 }
 
+@keyframes subtle-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.5), 0 0 50px rgba(129, 140, 248, 0.3);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Animation utility classes */
 .animate-orb-float {
-  animation: orb-float 7s ease-in-out infinite;
+  animation: orb-float 6.5s ease-in-out infinite;
+  will-change: transform, filter;
 }
 
 .animate-orb-swirl {
   animation: orb-swirl 14s linear infinite;
+  will-change: transform;
 }
 
 .animate-orb-pulse {
   animation: orb-pulse-light 4s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-scale-up {
+  animation: fade-in-scale 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform;
+}
+
+.animate-glow-pulse {
+  animation: subtle-glow-pulse 3s infinite ease-in-out;
+}
+
+/* Stagger delays for entrance orchestration */
+.stagger-1 {
+  animation-delay: 0.06s;
+}
+.stagger-2 {
+  animation-delay: 0.12s;
+}
+.stagger-3 {
+  animation-delay: 0.18s;
+}
+.stagger-4 {
+  animation-delay: 0.24s;
 }
 
 /* Ambient gradient background matching the screenshot */
@@ -59,6 +171,7 @@
   background: radial-gradient(circle at 50% 22%, rgba(26, 42, 70, 0.45) 0%, rgba(9, 14, 24, 0.85) 45%, #06080e 85%),
               radial-gradient(circle at 50% 100%, rgba(14, 76, 110, 0.28) 0%, transparent 65%),
               #06080e;
+  background-attachment: fixed;
 }
 
 /* Dark glassmorphic panels */
@@ -68,17 +181,37 @@
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  transform: translateZ(0);
 }
 
 .lix-glass-card-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow, background-color, border-color;
 }
 
 .lix-glass-card-hover:hover {
-  background: rgba(22, 30, 48, 0.92);
-  border-color: rgba(56, 189, 248, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 25px 55px -12px rgba(0, 0, 0, 0.75), 0 0 20px 0 rgba(56, 189, 248, 0.15);
+  background: rgba(22, 30, 48, 0.94);
+  border-color: rgba(56, 189, 248, 0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.75), 0 0 25px 0 rgba(56, 189, 248, 0.18);
+}
+
+.lix-glass-card-hover:active {
+  transform: translateY(-1px) scale(0.99);
+  transition-duration: 0.1s;
+}
+
+/* Tactile button press effect */
+.btn-tactile {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+.btn-tactile:hover {
+  transform: translateY(-1.5px);
+}
+.btn-tactile:active {
+  transform: translateY(0.5px) scale(0.96);
+  transition-duration: 0.08s;
 }
 
 /* Custom dark scrollbar */
@@ -94,8 +227,9 @@
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 9999px;
+  transition: background-color 0.2s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.32);
 }
