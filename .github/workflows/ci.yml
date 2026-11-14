@@ -1,0 +1,48 @@
+name: DocuMind CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  backend-check:
+    name: FastAPI Backend & Pipeline Verification
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Verify FastAPI app & PDF pipeline imports
+        run: python -c "from app.main import app; assert app.title == 'DocuMind API'"
+
+  frontend-build:
+    name: React + TypeScript Frontend Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies and build production bundle
+        run: |
+          npm install
+          npm run build

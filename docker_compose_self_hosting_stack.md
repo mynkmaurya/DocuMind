@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: documind-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-documind}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-documind_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-documind}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-documind} -d ${POSTGRES_DB:-documind}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: documind-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-documind}:${POSTGRES_PASSWORD:-documind_secret}@db:5432/${POSTGRES_DB:-documind}
+      STORAGE_DIR: /app/storage/documents
+      MAX_UPLOAD_SIZE_MB: ${MAX_UPLOAD_SIZE_MB:-25}
+      CHUNK_SIZE_CHARS: ${CHUNK_SIZE_CHARS:-800}
+      CHUNK_OVERLAP_CHARS: ${CHUNK_OVERLAP_CHARS:-150}
+      TOP_K_CHUNKS: ${TOP_K_CHUNKS:-5}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
+    volumes:
+      - pdf_storage:/app/storage/documents
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: documind-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${APP_PORT:-8080}:80"
+
+volumes:
+  postgres_data:
+  pdf_storage:

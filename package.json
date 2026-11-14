@@ -1,0 +1,11 @@
+{
+  "name": "documind-grounded-qa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Grounded PDF Q&A with Page-Level Citations",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm install && npm run build",
+    "preview": "cd frontend && npm run preview"
+  }
+}

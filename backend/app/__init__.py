@@ -1,0 +1,1 @@
+"""DocuMind FastAPI Backend Package."""

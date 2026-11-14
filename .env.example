@@ -1,0 +1,26 @@
+# ============================================================================
+# DocuMind Environment Configuration (.env)
+# Copy this file to `.env` before running `docker compose up --build`
+# ============================================================================
+
+# Port where the web interface will be served (http://localhost:8080)
+APP_PORT=8080
+
+# PostgreSQL Database Credentials (used by docker-compose)
+POSTGRES_USER=documind
+POSTGRES_PASSWORD=documind_secret_change_me
+POSTGRES_DB=documind
+
+# For local non-Docker runs, SQLite is used by default:
+# DATABASE_URL=sqlite:///./storage/documind.db
+
+# PDF Ingestion & Retrieval Settings
+MAX_UPLOAD_SIZE_MB=25
+CHUNK_SIZE_CHARS=800
+CHUNK_OVERLAP_CHARS=150
+TOP_K_CHUNKS=5
+
+# OpenAI API Configuration (Leave blank to use deterministic offline fallback)
+OPENAI_API_KEY=sk-your-openai-api-key-here
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+OPENAI_CHAT_MODEL=gpt-4o-mini

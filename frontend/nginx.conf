@@ -1,0 +1,31 @@
+server {
+    listen 80;
+    server_name _;
+
+    # Allow PDF uploads up to 30 MB
+    client_max_body_size 30M;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Reverse proxy API and Server-Sent Events (SSE) to FastAPI backend
+    location /api/ {
+        proxy_pass http://backend:8000/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Connection "";
+
+        # Critical for real-time SSE token streaming
+        proxy_buffering off;
+        proxy_cache off;
+        chunked_transfer_encoding on;
+        proxy_read_timeout 300s;
+    }
+
+    # SPA fallback routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
