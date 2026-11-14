@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 // ============================================================================
-// TYPES (frontend/src/types/documind.ts)
+// TYPES
 // ============================================================================
 export type DocumentStatusType = "uploading" | "processing" | "ready" | "error";
 
@@ -40,7 +40,7 @@ export interface ChatMessageItem {
 }
 
 // ============================================================================
-// API CLIENT + IN-BROWSER FALLBACK (frontend/src/api/client.ts)
+// API CLIENT + IN-BROWSER FALLBACK
 // ============================================================================
 const API_BASE: string =
   typeof window !== "undefined" && (window as any).__DOCUMIND_API_BASE_URL__
@@ -216,9 +216,7 @@ export const docuMindApi = {
         const isScannedMock = file.name.toLowerCase().includes("scanned");
         try {
           fallbackStore.pdfBlobUrls[newId] = URL.createObjectURL(file);
-        } catch {
-          // ignore blob URL failure
-        }
+        } catch {}
 
         const newDoc: DocumentItem = {
           id: newId,
@@ -291,13 +289,12 @@ export const docuMindApi = {
         method: "DELETE",
       });
       await parseJsonOrThrow<{ deleted: boolean }>(res);
-    } catch {
-      fallbackStore.documents = fallbackStore.documents.filter(
-        (d) => d.id !== documentId
-      );
-      delete fallbackStore.chunks[documentId];
-      delete fallbackStore.conversations[documentId];
-    }
+    } catch {}
+    fallbackStore.documents = fallbackStore.documents.filter(
+      (d) => d.id !== documentId
+    );
+    delete fallbackStore.chunks[documentId];
+    delete fallbackStore.conversations[documentId];
   },
 
   async listConversations(documentId: string): Promise<Conversation[]> {
@@ -431,7 +428,7 @@ export const docuMindApi = {
       if (signal?.aborted) {
         throw new DOMException("Aborted", "AbortError");
       }
-      await new Promise((r) => window.setTimeout(r, 35));
+      await new Promise((r) => window.setTimeout(r, 30));
       const token = words[i] + (i < words.length - 1 ? " " : "");
       callbacks.onToken(token);
     }
@@ -457,290 +454,111 @@ export const docuMindApi = {
 };
 
 // ============================================================================
-// COMPONENT: DocumentStatus (frontend/src/components/DocumentStatus.tsx)
+// IRIDESCENT ORB COMPONENT
 // ============================================================================
-interface DocumentStatusProps {
-  status: DocumentStatusType;
-  pageCount?: number | null;
-  errorMessage?: string | null;
-}
-
-export const DocumentStatus: React.FC<DocumentStatusProps> = ({
-  status,
-  pageCount,
-  errorMessage,
-}) => {
-  const styles: Record<
-    DocumentStatusType,
-    { label: string; badgeClass: string; dotClass: string }
-  > = {
-    uploading: {
-      label: "Uploading",
-      badgeClass: "bg-sky-50 text-sky-800 border-sky-200",
-      dotClass: "bg-sky-500 animate-pulse",
-    },
-    processing: {
-      label: "Processing",
-      badgeClass: "bg-amber-50 text-amber-800 border-amber-200",
-      dotClass: "bg-amber-500 animate-pulse",
-    },
-    ready: {
-      label: pageCount ? `Ready · ${pageCount}p` : "Ready",
-      badgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200",
-      dotClass: "bg-emerald-500",
-    },
-    error: {
-      label: "Error",
-      badgeClass: "bg-rose-50 text-rose-800 border-rose-200",
-      dotClass: "bg-rose-500",
-    },
-  };
-
-  const current = styles[status];
+export const IridescentOrb: React.FC<{
+  size?: "sm" | "md" | "lg";
+  className?: string;
+  isStreaming?: boolean;
+}> = ({ size = "md", className = "", isStreaming = false }) => {
+  const sizeClasses = {
+    sm: "w-24 h-24 sm:w-28 sm:h-28",
+    md: "w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48",
+    lg: "w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60",
+  }[size];
 
   return (
-    <div className="inline-flex flex-col items-start gap-1">
-      <span
-        role="status"
-        aria-live="polite"
-        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${current.badgeClass}`}
-      >
-        <span className={`h-1.5 w-1.5 rounded-full ${current.dotClass}`} />
-        {current.label}
-      </span>
-      {status === "error" && errorMessage && (
-        <p className="text-xs text-rose-700 leading-snug">{errorMessage}</p>
-      )}
-    </div>
-  );
-};
-
-// ============================================================================
-// COMPONENT: DocumentUploader (frontend/src/components/DocumentUploader.tsx)
-// ============================================================================
-interface DocumentUploaderProps {
-  isUploading: boolean;
-  uploadProgress: number;
-  maxSizeMb?: number;
-  onUploadFile: (file: File) => void;
-  onValidationError: (message: string) => void;
-}
-
-export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
-  isUploading,
-  uploadProgress,
-  maxSizeMb = 25,
-  onUploadFile,
-  onValidationError,
-}) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const validateAndSubmit = (file: File | undefined) => {
-    if (!file) return;
-    if (
-      !file.name.toLowerCase().endsWith(".pdf") &&
-      file.type !== "application/pdf"
-    ) {
-      onValidationError(
-        "Unsupported file type. Please choose a PDF (.pdf) document."
-      );
-      return;
-    }
-    if (file.size === 0) {
-      onValidationError("The selected PDF file is empty (0 bytes).");
-      return;
-    }
-    if (file.size > maxSizeMb * 1024 * 1024) {
-      onValidationError(`File exceeds the ${maxSizeMb} MB limit.`);
-      return;
-    }
-    onUploadFile(file);
-  };
-
-  return (
-    <div className="w-full">
+    <div
+      className={`relative flex items-center justify-center select-none ${sizeClasses} ${className}`}
+      aria-hidden="true"
+    >
       <div
-        role="button"
-        tabIndex={0}
-        aria-label={`Upload a PDF document up to ${maxSizeMb} megabytes`}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            fileInputRef.current?.click();
-          }
+        className={`absolute inset-0 rounded-full blur-2xl opacity-70 transition-all duration-700 pointer-events-none ${
+          isStreaming ? "scale-125 opacity-90 blur-3xl" : "scale-105"
+        }`}
+        style={{
+          background:
+            "radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(139, 92, 246, 0.35) 45%, rgba(236, 72, 153, 0.2) 70%, transparent 85%)",
         }}
-        onDragOver={(e) => {
-          e.preventDefault();
-          setIsDragging(true);
-        }}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={(e) => {
-          e.preventDefault();
-          setIsDragging(false);
-          validateAndSubmit(e.dataTransfer.files?.[0]);
-        }}
-        onClick={() => !isUploading && fileInputRef.current?.click()}
-        className={`group cursor-pointer rounded-xl border-2 border-dashed p-4 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 ${
-          isDragging
-            ? "border-indigo-600 bg-indigo-50/70"
-            : "border-slate-300 bg-white hover:border-indigo-500 hover:bg-slate-50"
-        } ${isUploading ? "pointer-events-none opacity-75" : ""}`}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".pdf,application/pdf"
-          className="hidden"
-          onChange={(e) => {
-            validateAndSubmit(e.target.files?.[0]);
-            e.target.value = "";
+      />
+      <div className="relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_-12px_24px_rgba(0,0,0,0.85),0_15px_35px_rgba(0,0,0,0.9)] animate-orb-float border border-white/10">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 45% 40%, #0d1629 0%, #050811 75%, #020307 100%)",
           }}
         />
-        <div className="text-sm font-semibold text-slate-800 group-hover:text-indigo-700">
-          {isUploading ? "Uploading PDF…" : "Upload a PDF document"}
-        </div>
-        <p className="mt-1 text-xs text-slate-500">
-          Drag & drop or press Enter to browse · Text-based PDF up to {maxSizeMb}{" "}
-          MB
-        </p>
-
-        {isUploading && (
-          <div className="mt-3 w-full">
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
-              <div
-                className="h-full bg-indigo-600 transition-all duration-200"
-                style={{ width: `${uploadProgress}%` }}
-              />
-            </div>
-            <span className="mt-1 block text-xs font-medium text-indigo-700">
-              {uploadProgress}%
-            </span>
-          </div>
-        )}
+        <div
+          className="absolute -inset-1/2 rounded-full opacity-85 mix-blend-screen filter blur-md animate-orb-swirl"
+          style={{
+            background:
+              "conic-gradient(from 180deg at 50% 50%, #38bdf8 0deg, #818cf8 90deg, #ec4899 180deg, #f59e0b 260deg, #38bdf8 360deg)",
+          }}
+        />
+        <div
+          className="absolute -inset-1/3 rounded-full opacity-75 mix-blend-color-dodge filter blur-lg animate-orb-swirl [animation-direction:reverse] [animation-duration:18s]"
+          style={{
+            background:
+              "conic-gradient(from 45deg at 50% 50%, #06b6d4 0deg, #3b82f6 120deg, #a855f7 220deg, #ec4899 300deg, #06b6d4 360deg)",
+          }}
+        />
+        <div
+          className="absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full mix-blend-lighten filter blur-sm animate-orb-pulse"
+          style={{
+            background:
+              "radial-gradient(circle at 40% 40%, rgba(254, 240, 138, 0.85) 0%, rgba(249, 115, 22, 0.65) 35%, rgba(139, 92, 246, 0.45) 70%, transparent 100%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{
+            boxShadow:
+              "inset 0 0 40px rgba(0, 0, 0, 0.85), inset 0 -15px 30px rgba(0, 0, 0, 0.9), inset 0 2px 8px rgba(255, 255, 255, 0.35)",
+          }}
+        />
+        <div className="absolute top-2 left-6 right-6 h-10 rounded-full bg-gradient-to-b from-white/35 to-transparent blur-[1.5px] pointer-events-none" />
       </div>
     </div>
   );
 };
 
 // ============================================================================
-// COMPONENT: ConversationHistory (frontend/src/components/ConversationHistory.tsx)
+// CITATION LINK COMPONENT
 // ============================================================================
-interface ConversationHistoryProps {
-  conversations: Conversation[];
-  activeConversationId: string | null;
-  disabled?: boolean;
-  onSelectConversation: (conversationId: string) => void;
-  onCreateConversation: () => void;
-}
-
-export const ConversationHistory: React.FC<ConversationHistoryProps> = ({
-  conversations,
-  activeConversationId,
-  disabled = false,
-  onSelectConversation,
-  onCreateConversation,
-}) => {
-  return (
-    <section aria-label="Conversation history" className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-          Conversations
-        </h2>
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={onCreateConversation}
-          className="rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          + New Chat
-        </button>
-      </div>
-
-      {conversations.length === 0 ? (
-        <p className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500">
-          No conversations yet for this document. Ask a question to start.
-        </p>
-      ) : (
-        <ul className="space-y-1 max-h-48 overflow-y-auto pr-1">
-          {conversations.map((conv) => {
-            const isSelected = conv.id === activeConversationId;
-            return (
-              <li key={conv.id}>
-                <button
-                  type="button"
-                  onClick={() => onSelectConversation(conv.id)}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 ${
-                    isSelected
-                      ? "bg-indigo-600 font-semibold text-white shadow-sm"
-                      : "text-slate-700 hover:bg-slate-100"
-                  }`}
-                >
-                  <div className="truncate">{conv.title}</div>
-                  <div
-                    className={`mt-0.5 text-[11px] ${
-                      isSelected ? "text-indigo-100" : "text-slate-400"
-                    }`}
-                  >
-                    {new Date(conv.created_date).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </div>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </section>
-  );
-};
-
-// ============================================================================
-// COMPONENT: CitationLink (frontend/src/components/CitationLink.tsx)
-// ============================================================================
-interface CitationLinkProps {
+export const CitationLink: React.FC<{
   citation: Citation;
-  onOpenPage: (
-    documentId: string,
-    pageNumber: number,
-    citation: Citation
-  ) => void;
-}
-
-export const CitationLink: React.FC<CitationLinkProps> = ({
-  citation,
-  onOpenPage,
-}) => {
+  onOpenPage: (docId: string, pageNumber: number, citation: Citation) => void;
+}> = ({ citation, onOpenPage }) => {
   const [showExcerpt, setShowExcerpt] = useState(false);
 
   return (
-    <div className="inline-flex flex-col items-start">
-      <div className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50/90 px-2.5 py-1 text-xs font-semibold text-indigo-800 shadow-sm">
+    <div className="inline-flex flex-col items-start my-0.5">
+      <div className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-[#121a28] px-2.5 py-1 text-xs font-medium text-sky-300 shadow-[0_2px_8px_rgba(0,0,0,0.5)] hover:border-sky-400 hover:bg-[#182338] transition-all">
         <button
           type="button"
           onClick={() =>
             onOpenPage(citation.document_id, citation.page_number, citation)
           }
-          className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 rounded"
+          className="flex items-center gap-1 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-400 rounded"
           title={`Open PDF to Page ${citation.page_number}`}
         >
+          <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
           Page {citation.page_number}
         </button>
+        <span className="text-slate-600">·</span>
         <button
           type="button"
           aria-expanded={showExcerpt}
-          aria-label={`Toggle passage excerpt for page ${citation.page_number}`}
           onClick={() => setShowExcerpt((prev) => !prev)}
-          className="ml-1 rounded px-1 text-[11px] text-indigo-600 hover:bg-indigo-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+          className="rounded px-1 text-[11px] font-medium text-slate-400 hover:text-sky-200 transition-colors"
         >
           {showExcerpt ? "Hide quote" : "Quote"}
         </button>
       </div>
 
       {showExcerpt && (
-        <blockquote className="mt-1.5 max-w-md rounded-lg border-l-4 border-indigo-500 bg-slate-50 p-2.5 text-xs italic text-slate-700 shadow-sm">
+        <blockquote className="mt-2 max-w-lg rounded-xl border-l-2 border-sky-400 bg-[#0d131f]/95 p-3 text-xs leading-relaxed italic text-slate-300 shadow-xl backdrop-blur-md">
           “{citation.excerpt}”
         </blockquote>
       )}
@@ -749,40 +567,36 @@ export const CitationLink: React.FC<CitationLinkProps> = ({
 };
 
 // ============================================================================
-// COMPONENT: ChatMessage (frontend/src/components/ChatMessage.tsx)
+// CHAT MESSAGE COMPONENT
 // ============================================================================
-interface ChatMessageProps {
+export const ChatMessage: React.FC<{
   message: ChatMessageItem;
-  onOpenCitationPage: (
-    documentId: string,
-    pageNumber: number,
-    citation: Citation
-  ) => void;
-}
-
-export const ChatMessage: React.FC<ChatMessageProps> = ({
-  message,
-  onOpenCitationPage,
-}) => {
+  onOpenCitationPage: (docId: string, pageNumber: number, citation: Citation) => void;
+}> = ({ message, onOpenCitationPage }) => {
   const isUser = message.role === "user";
 
   return (
-    <article
-      className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}
-    >
+    <article className={`flex w-full ${isUser ? "justify-end" : "justify-start"} my-2`}>
       <div
-        className={`max-w-2xl rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+        className={`max-w-2xl text-sm leading-relaxed ${
           isUser
-            ? "bg-indigo-600 text-white"
-            : "border border-slate-200 bg-white text-slate-800"
+            ? "rounded-2xl rounded-tr-sm bg-gradient-to-r from-sky-600 to-blue-600 px-4 py-2.5 text-white shadow-lg border border-sky-400/30"
+            : "rounded-2xl rounded-tl-sm bg-[#0e1422]/90 border border-slate-800/90 px-4 sm:px-5 py-3.5 sm:py-4 text-slate-200 shadow-xl backdrop-blur-md"
         }`}
       >
-        <div className="whitespace-pre-wrap">{message.text}</div>
+        {!isUser && (
+          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-800/60 text-xs font-semibold text-slate-400">
+            <span className="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]" />
+            <span>DocuMind Grounded Assistant</span>
+          </div>
+        )}
+
+        <div className="whitespace-pre-wrap text-slate-100">{message.text}</div>
 
         {!isUser && message.citations && message.citations.length > 0 && (
-          <div className="mt-3 border-t border-slate-100 pt-2.5">
-            <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-              Verified Source Pages
+          <div className="mt-3.5 border-t border-slate-800/80 pt-3">
+            <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-sky-400/90">
+              <span>Verified Page Citations</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {message.citations.map((citation) => (
@@ -801,59 +615,25 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
 };
 
 // ============================================================================
-// COMPONENT: StreamingIndicator (frontend/src/components/StreamingIndicator.tsx)
+// MESSAGE INPUT COMPONENT
 // ============================================================================
-interface StreamingIndicatorProps {
-  isStreaming: boolean;
-  onStopStream?: () => void;
-}
-
-export const StreamingIndicator: React.FC<StreamingIndicatorProps> = ({
-  isStreaming,
-  onStopStream,
-}) => {
-  if (!isStreaming) return null;
-
-  return (
-    <div
-      role="status"
-      aria-live="polite"
-      className="inline-flex items-center gap-3 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 text-xs font-medium text-indigo-800"
-    >
-      <span className="flex items-center gap-1">
-        <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-600 [animation-delay:-0.2s]" />
-        <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-600 [animation-delay:-0.1s]" />
-        <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-600" />
-      </span>
-      <span>Streaming grounded answer…</span>
-      {onStopStream && (
-        <button
-          type="button"
-          onClick={onStopStream}
-          className="rounded bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700 shadow-sm hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
-        >
-          Stop
-        </button>
-      )}
-    </div>
-  );
-};
-
-// ============================================================================
-// COMPONENT: MessageInput (frontend/src/components/MessageInput.tsx)
-// ============================================================================
-interface MessageInputProps {
+export const MessageInput: React.FC<{
   disabled: boolean;
   placeholder?: string;
+  activeDocumentName?: string | null;
   onSendQuestion: (question: string) => void;
-}
-
-export const MessageInput: React.FC<MessageInputProps> = ({
+  onOpenUploadModal?: () => void;
+  onOpenToolsModal?: () => void;
+}> = ({
   disabled,
-  placeholder = "Ask a question about the uploaded PDF…",
+  placeholder = "Ask me anything…",
+  activeDocumentName,
   onSendQuestion,
+  onOpenUploadModal,
+  onOpenToolsModal,
 }) => {
   const [question, setQuestion] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -861,222 +641,85 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     if (!trimmed || disabled) return;
     onSendQuestion(trimmed);
     setQuestion("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex items-end gap-2 rounded-2xl border border-slate-300 bg-white p-2 shadow-sm focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600/20"
-    >
-      <label htmlFor="documind-question-input" className="sr-only">
-        Ask a question about the document
-      </label>
-      <textarea
-        id="documind-question-input"
-        rows={2}
-        value={question}
-        disabled={disabled}
-        placeholder={placeholder}
-        onChange={(e) => setQuestion(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            handleSubmit(e);
-          }
-        }}
-        className="max-h-36 min-h-[44px] flex-1 resize-none bg-transparent px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
-      />
-      <button
-        type="submit"
-        disabled={disabled || !question.trim()}
-        className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-300"
-      >
-        Ask
-      </button>
-    </form>
-  );
-};
+    <div className="w-full max-w-2xl mx-auto">
+      <div className="relative rounded-2xl sm:rounded-3xl p-1 bg-gradient-to-b from-[#1b2537]/80 to-[#101622]/90 border border-slate-700/50 shadow-[0_20px_50px_rgba(0,0,0,0.65)] backdrop-blur-xl">
+        <div className="flex items-center justify-between px-3.5 sm:px-4 pt-2.5 pb-2 text-[11px] sm:text-xs font-medium text-slate-300">
+          <div className="flex items-center gap-1.5 text-sky-400">
+            <span className="font-semibold text-slate-200">
+              {activeDocumentName
+                ? `⚡ Grounded on: ${activeDocumentName}`
+                : "⚡ Unlock more features with Pro"}
+            </span>
+          </div>
+          <span className="hidden sm:inline-block text-[11px] text-slate-500">
+            DocuMind AI · Page Citations
+          </span>
+        </div>
 
-// ============================================================================
-// COMPONENT: ErrorState (frontend/src/components/ErrorState.tsx)
-// ============================================================================
-interface ErrorStateProps {
-  message: string | null;
-  onDismiss?: () => void;
-  onRetry?: () => void;
-}
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-xl sm:rounded-2xl bg-[#090d15]/95 border border-slate-800/80 p-2.5 sm:p-3 transition-colors focus-within:border-sky-500/50"
+        >
+          <textarea
+            ref={textareaRef}
+            rows={1}
+            value={question}
+            disabled={disabled}
+            placeholder={
+              activeDocumentName
+                ? `Ask about ${activeDocumentName} (e.g. key takeaways, summary)…`
+                : placeholder
+            }
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+            className="w-full resize-none bg-transparent px-2 pt-1 pb-2 text-sm sm:text-base text-slate-100 placeholder:text-slate-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 min-h-[36px]"
+          />
 
-export const ErrorState: React.FC<ErrorStateProps> = ({
-  message,
-  onDismiss,
-  onRetry,
-}) => {
-  if (!message) return null;
+          <div className="flex items-center justify-between pt-2 border-t border-slate-800/60 mt-1">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={onOpenUploadModal}
+                className="inline-flex items-center gap-1.5 rounded-full border border-slate-700/60 bg-[#141b27] px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium text-slate-300 hover:text-white transition-all"
+              >
+                <span>📎 Import file</span>
+              </button>
+              <button
+                type="button"
+                onClick={onOpenToolsModal}
+                className="inline-flex items-center gap-1.5 rounded-full border border-slate-700/60 bg-[#141b27] px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium text-slate-300 hover:text-white transition-all"
+              >
+                <span>⚙ Tools</span>
+              </button>
+            </div>
 
-  return (
-    <div
-      role="alert"
-      className="flex items-center justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900 shadow-sm"
-    >
-      <div className="flex-1">
-        <span className="font-semibold">Notice: </span>
-        <span>{message}</span>
-      </div>
-      <div className="flex items-center gap-2">
-        {onRetry && (
-          <button
-            type="button"
-            onClick={onRetry}
-            className="rounded-lg bg-rose-700 px-3 py-1 text-xs font-semibold text-white hover:bg-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600"
-          >
-            Retry
-          </button>
-        )}
-        {onDismiss && (
-          <button
-            type="button"
-            onClick={onDismiss}
-            aria-label="Dismiss error"
-            className="rounded-lg border border-rose-300 bg-white px-2.5 py-1 text-xs font-semibold text-rose-800 hover:bg-rose-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600"
-          >
-            Dismiss
-          </button>
-        )}
+            <button
+              type="submit"
+              disabled={disabled || !question.trim()}
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0098ea] hover:bg-[#0089d4] active:scale-95 disabled:opacity-40 text-white flex items-center justify-center font-bold shadow-[0_0_15px_rgba(0,152,234,0.4)] transition-all"
+            >
+              ↑
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
 };
 
 // ============================================================================
-// COMPONENT: PdfPageViewer (frontend/src/components/PdfPageViewer.tsx)
-// ============================================================================
-interface PdfPageViewerProps {
-  pdfUrl: string | null;
-  documentName?: string;
-  pageCount?: number | null;
-  activePage: number | null;
-  activeCitation: Citation | null;
-  onSelectPage?: (page: number) => void;
-  onClose: () => void;
-}
-
-export const PdfPageViewer: React.FC<PdfPageViewerProps> = ({
-  pdfUrl,
-  documentName,
-  pageCount,
-  activePage,
-  activeCitation,
-  onSelectPage,
-  onClose,
-}) => {
-  if (!pdfUrl || !activePage) return null;
-  const isBlobUrl = pdfUrl.startsWith("blob:");
-
-  return (
-    <aside
-      aria-label={`PDF viewer opened to page ${activePage}`}
-      className="flex h-full w-full flex-col border-l border-slate-200 bg-white lg:w-[440px] xl:w-[500px]"
-    >
-      <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span className="rounded-md bg-indigo-100 px-2.5 py-0.5 text-xs font-bold text-indigo-800">
-            Page {activePage}
-            {pageCount ? ` of ${pageCount}` : ""}
-          </span>
-          <span className="truncate text-xs font-medium text-slate-600">
-            {documentName || "Source PDF Inspection"}
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
-        >
-          Close PDF
-        </button>
-      </div>
-
-      {activeCitation && (
-        <div className="border-b border-indigo-100 bg-indigo-50/70 px-4 py-3 text-xs text-slate-700">
-          <div className="font-semibold text-indigo-950">
-            Verified Chunk Excerpt (Chunk ID: {activeCitation.chunk_id})
-          </div>
-          <p className="mt-1 italic text-slate-800">
-            “{activeCitation.excerpt}”
-          </p>
-        </div>
-      )}
-
-      <div className="flex-1 overflow-y-auto bg-slate-100 p-4">
-        {isBlobUrl ? (
-          <iframe
-            key={`${pdfUrl}#page=${activePage}`}
-            src={`${pdfUrl}#page=${activePage}`}
-            title={`PDF Document Page ${activePage}`}
-            className="h-full w-full rounded-lg border border-slate-200 bg-white shadow-sm"
-          />
-        ) : (
-          <div className="mx-auto flex h-full max-w-md flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div>
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                <span>{documentName || "PDF Document"}</span>
-                <span>Page {activePage}</span>
-              </div>
-              <div className="mt-4 space-y-3 text-xs leading-relaxed text-slate-600">
-                <p className="text-slate-400">
-                  [Extracted Page {activePage} Content View]
-                </p>
-                {activeCitation ? (
-                  <mark className="block rounded-lg border border-amber-200 bg-amber-50/90 p-3 font-medium text-slate-900 not-italic">
-                    {activeCitation.excerpt}
-                  </mark>
-                ) : (
-                  <p>
-                    Select a citation badge in the chat panel to highlight the
-                    grounded passage on this page.
-                  </p>
-                )}
-                <p className="text-slate-400">
-                  When connected to the FastAPI backend (`GET
-                  /api/documents/:id/file#page={activePage}`) or when you upload
-                  a local PDF file, the native PDF page renders directly in this
-                  frame.
-                </p>
-              </div>
-            </div>
-
-            {onSelectPage && pageCount && pageCount > 1 && (
-              <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-3">
-                <button
-                  type="button"
-                  disabled={activePage <= 1}
-                  onClick={() => onSelectPage(activePage - 1)}
-                  className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40"
-                >
-                  ← Prev Page
-                </button>
-                <span className="text-xs text-slate-500">
-                  Page {activePage} / {pageCount}
-                </span>
-                <button
-                  type="button"
-                  disabled={activePage >= pageCount}
-                  onClick={() => onSelectPage(activePage + 1)}
-                  className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40"
-                >
-                  Next Page →
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </aside>
-  );
-};
-
-// ============================================================================
-// MAIN APPLICATION (frontend/src/App.tsx)
+// MAIN APP COMPONENT
 // ============================================================================
 export const App: React.FC = () => {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
@@ -1089,6 +732,10 @@ export const App: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isStreaming, setIsStreaming] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [showDocumentsModal, setShowDocumentsModal] = useState(false);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showToolsModal, setShowToolsModal] = useState(false);
 
   const [viewerPage, setViewerPage] = useState<number | null>(null);
   const [viewerCitation, setViewerCitation] = useState<Citation | null>(null);
@@ -1112,40 +759,18 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const hasPending = documents.some(
-      (d) => d.status === "uploading" || d.status === "processing"
-    );
-    if (!hasPending) return;
-
-    const timer = window.setInterval(async () => {
-      try {
-        const updated = await docuMindApi.listDocuments();
-        setDocuments(updated);
-      } catch {
-        // Ignore transient polling failures
-      }
-    }, 900);
-
-    return () => window.clearInterval(timer);
-  }, [documents]);
-
-  useEffect(() => {
     if (!selectedDocument || selectedDocument.status !== "ready") {
       setConversations([]);
       setActiveConvId(null);
       setMessages([]);
       return;
     }
-
     docuMindApi
       .listConversations(selectedDocument.id)
       .then((convs) => {
         setConversations(convs);
         if (convs.length > 0) {
           setActiveConvId(convs[0].id);
-        } else {
-          setActiveConvId(null);
-          setMessages([]);
         }
       })
       .catch((err: Error) => setErrorMessage(err.message));
@@ -1156,10 +781,7 @@ export const App: React.FC = () => {
       setMessages([]);
       return;
     }
-    docuMindApi
-      .getMessages(activeConvId)
-      .then(setMessages)
-      .catch((err: Error) => setErrorMessage(err.message));
+    docuMindApi.getMessages(activeConvId).then(setMessages).catch(() => {});
   }, [activeConvId]);
 
   useEffect(() => {
@@ -1180,7 +802,7 @@ export const App: React.FC = () => {
         ...prev.filter((d) => d.id !== created.id),
       ]);
       setSelectedDocId(created.id);
-      setViewerPage(null);
+      setShowDocumentsModal(false);
     } catch (err: any) {
       setErrorMessage(err.message || "Upload failed.");
     } finally {
@@ -1188,326 +810,406 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleDeleteDocument = async (docId: string) => {
-    try {
-      await docuMindApi.deleteDocument(docId);
-      const remaining = documents.filter((d) => d.id !== docId);
-      setDocuments(remaining);
-      if (selectedDocId === docId) {
-        setSelectedDocId(remaining[0]?.id || null);
-        setViewerPage(null);
-      }
-    } catch (err: any) {
-      setErrorMessage(err.message || "Could not delete document.");
-    }
-  };
-
-  const handleCreateConversation = async () => {
-    if (!selectedDocument || selectedDocument.status !== "ready") return;
-    setErrorMessage(null);
-    try {
-      const conv = await docuMindApi.createConversation(selectedDocument.id);
-      setConversations((prev) => [conv, ...prev]);
-      setActiveConvId(conv.id);
-      setMessages([]);
-    } catch (err: any) {
-      setErrorMessage(err.message);
-    }
-  };
-
   const handleSendQuestion = async (question: string) => {
-    if (
-      !selectedDocument ||
-      selectedDocument.status !== "ready" ||
-      isStreaming
-    ) {
-      return;
-    }
+    if (!selectedDocument || isStreaming) return;
     setErrorMessage(null);
 
-    try {
-      let targetConvId = activeConvId;
-      if (!targetConvId) {
-        const createdConv = await docuMindApi.createConversation(
-          selectedDocument.id,
-          question.slice(0, 60)
-        );
-        setConversations((prev) => [createdConv, ...prev]);
-        setActiveConvId(createdConv.id);
-        targetConvId = createdConv.id;
-      }
-
-      const tempUserMsg: ChatMessageItem = {
-        id: `user-${Date.now()}`,
-        conversation_id: targetConvId,
-        role: "user",
-        text: question,
-        timestamp: new Date().toISOString(),
-        citations: [],
-      };
-
-      const streamingMsgId = `assistant-stream-${Date.now()}`;
-      const tempAssistantMsg: ChatMessageItem = {
-        id: streamingMsgId,
-        conversation_id: targetConvId,
-        role: "assistant",
-        text: "",
-        timestamp: new Date().toISOString(),
-        citations: [],
-      };
-
-      setMessages((prev) => [...prev, tempUserMsg, tempAssistantMsg]);
-      setIsStreaming(true);
-
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
-
-      await docuMindApi.streamQuestion(
-        targetConvId,
-        question,
-        {
-          onToken: (delta) => {
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === streamingMsgId ? { ...m, text: m.text + delta } : m
-              )
-            );
-          },
-          onCitations: (persistedId, verifiedCitations) => {
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === streamingMsgId
-                  ? { ...m, id: persistedId, citations: verifiedCitations }
-                  : m
-              )
-            );
-          },
-          onDone: (persistedId, finalText) => {
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === streamingMsgId || m.id === persistedId
-                  ? { ...m, id: persistedId, text: finalText }
-                  : m
-              )
-            );
-          },
-          onError: (msg) => {
-            setErrorMessage(msg);
-          },
-        },
-        controller.signal
+    let targetConvId = activeConvId;
+    if (!targetConvId) {
+      const createdConv = await docuMindApi.createConversation(
+        selectedDocument.id,
+        question.slice(0, 50)
       );
-    } catch (err: any) {
-      if (err?.name !== "AbortError") {
-        setErrorMessage(err.message || "Could not answer right now.");
-      }
-    } finally {
-      setIsStreaming(false);
-      abortControllerRef.current = null;
+      setConversations((prev) => [createdConv, ...prev]);
+      setActiveConvId(createdConv.id);
+      targetConvId = createdConv.id;
     }
+
+    const tempUserMsg: ChatMessageItem = {
+      id: `user-${Date.now()}`,
+      conversation_id: targetConvId,
+      role: "user",
+      text: question,
+      timestamp: new Date().toISOString(),
+      citations: [],
+    };
+
+    const streamingMsgId = `assistant-stream-${Date.now()}`;
+    const tempAssistantMsg: ChatMessageItem = {
+      id: streamingMsgId,
+      conversation_id: targetConvId,
+      role: "assistant",
+      text: "",
+      timestamp: new Date().toISOString(),
+      citations: [],
+    };
+
+    setMessages((prev) => [...prev, tempUserMsg, tempAssistantMsg]);
+    setIsStreaming(true);
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    await docuMindApi.streamQuestion(
+      targetConvId,
+      question,
+      {
+        onToken: (delta) => {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === streamingMsgId ? { ...m, text: m.text + delta } : m
+            )
+          );
+        },
+        onCitations: (persistedId, verifiedCitations) => {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === streamingMsgId
+                ? { ...m, id: persistedId, citations: verifiedCitations }
+                : m
+            )
+          );
+        },
+        onDone: (persistedId, finalText) => {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === streamingMsgId || m.id === persistedId
+                ? { ...m, id: persistedId, text: finalText }
+                : m
+            )
+          );
+        },
+        onError: (msg) => setErrorMessage(msg),
+      },
+      controller.signal
+    );
+    setIsStreaming(false);
   };
+
+  const hasMessages = messages.length > 0;
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-slate-50 md:flex-row">
-      <aside className="flex w-full flex-col gap-5 border-b border-slate-200 bg-white p-4 md:h-full md:w-80 md:border-b-0 md:border-r">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-bold tracking-tight text-slate-900">
-              DocuMind
-            </h1>
-            <p className="text-xs text-slate-500">
-              Grounded PDF Q&A with Page Citations
-            </p>
+    <div className="min-h-screen w-full lix-bg-gradient text-slate-100 flex flex-col md:flex-row overflow-x-hidden">
+      {/* LEFT NAVIGATION DOCK */}
+      <nav className="hidden md:flex flex-col justify-between items-center py-6 px-4 w-20 shrink-0 border-r border-slate-800/80 bg-[#090d16]/70 backdrop-blur-xl z-30">
+        <div className="flex flex-col items-center gap-6">
+          <div className="font-extrabold text-lg tracking-widest text-white select-none">
+            LIX
+          </div>
+          <div className="flex flex-col items-center gap-3.5">
+            <button
+              type="button"
+              onClick={() => {
+                setMessages([]);
+                setViewerPage(null);
+              }}
+              className="w-10 h-10 rounded-2xl bg-[#0098ea] hover:bg-[#0089d4] text-white flex items-center justify-center shadow-[0_0_15px_rgba(0,152,234,0.4)]"
+            >
+              ⌂
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowDocumentsModal((v) => !v)}
+              className="w-10 h-10 rounded-2xl bg-slate-800/60 text-slate-400 hover:text-white flex items-center justify-center"
+            >
+              📄
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowHistoryModal((v) => !v)}
+              className="w-10 h-10 rounded-2xl bg-slate-800/60 text-slate-400 hover:text-white flex items-center justify-center"
+            >
+              🕒
+            </button>
           </div>
         </div>
 
-        <DocumentUploader
-          isUploading={isUploading}
-          uploadProgress={uploadProgress}
-          onUploadFile={handleUploadFile}
-          onValidationError={setErrorMessage}
-        />
-
-        <section aria-label="Uploaded documents" className="flex flex-col gap-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Documents ({documents.length})
-          </h2>
-          {documents.length === 0 ? (
-            <p className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500">
-              Upload a text-based PDF above to begin asking questions.
-            </p>
-          ) : (
-            <ul className="space-y-2 max-h-52 overflow-y-auto pr-1">
-              {documents.map((doc) => {
-                const isSelected = doc.id === selectedDocId;
-                return (
-                  <li
-                    key={doc.id}
-                    className={`rounded-xl border p-2.5 transition ${
-                      isSelected
-                        ? "border-indigo-600 bg-indigo-50/40"
-                        : "border-slate-200 bg-white hover:border-slate-300"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedDocId(doc.id)}
-                        className="flex-1 text-left text-xs font-semibold text-slate-800 hover:text-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 rounded"
-                      >
-                        <div className="truncate">{doc.filename}</div>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteDocument(doc.id)}
-                        aria-label={`Delete ${doc.filename}`}
-                        className="rounded px-1.5 py-0.5 text-[11px] text-slate-400 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                    <div className="mt-2 flex items-center justify-between">
-                      <DocumentStatus
-                        status={doc.status}
-                        pageCount={doc.page_count}
-                        errorMessage={doc.processing_error}
-                      />
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </section>
-
-        <div className="mt-auto border-t border-slate-100 pt-4">
-          <ConversationHistory
-            conversations={conversations}
-            activeConversationId={activeConvId}
-            disabled={!selectedDocument || selectedDocument.status !== "ready"}
-            onSelectConversation={setActiveConvId}
-            onCreateConversation={handleCreateConversation}
-          />
+        <div className="flex flex-col items-center gap-4">
+          <button
+            type="button"
+            onClick={() => setShowToolsModal((v) => !v)}
+            className="w-9 h-9 text-slate-400 hover:text-white flex items-center justify-center"
+          >
+            ⚙
+          </button>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 p-0.5 shadow-md">
+            <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xs font-bold text-sky-300">
+              H
+            </div>
+          </div>
         </div>
-      </aside>
+      </nav>
 
-      <main className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-3.5">
-          {selectedDocument ? (
-            <div className="flex items-center gap-3">
-              <h2 className="truncate text-sm font-bold text-slate-900">
-                {selectedDocument.filename}
-              </h2>
-              <DocumentStatus
-                status={selectedDocument.status}
-                pageCount={selectedDocument.page_count}
+      {/* MOBILE TOP BAR */}
+      <header className="md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-[#090d16]/90 backdrop-blur-lg sticky top-0 z-40">
+        <div className="flex items-center gap-2">
+          <span className="font-extrabold text-base tracking-wider text-white">
+            LIX
+          </span>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400">
+            DocuMind
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowDocumentsModal(true)}
+          className="p-1.5 rounded-lg border border-slate-700 bg-slate-800/60 text-slate-300 text-xs"
+        >
+          PDFs
+        </button>
+      </header>
+
+      {/* MAIN VIEWPORT */}
+      <main className="flex-1 flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 max-w-6xl mx-auto w-full relative z-10 pb-24 md:pb-8">
+        {!hasMessages ? (
+          <div className="flex-1 flex flex-col items-center justify-center text-center my-auto pt-2 pb-6">
+            <div className="mb-6 sm:mb-8">
+              <IridescentOrb size="md" isStreaming={isStreaming} />
+            </div>
+
+            <div className="space-y-1 sm:space-y-2 mb-8">
+              <div className="text-xs sm:text-sm font-medium text-slate-400 tracking-wide">
+                Hi, Hendricks
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
+                How can I help today?
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto pt-1 leading-relaxed">
+                I'm here to help — from quick answers to smart recommendations.
+              </p>
+            </div>
+
+            <div className="w-full max-w-2xl">
+              <MessageInput
+                disabled={isStreaming}
+                activeDocumentName={selectedDocument?.filename}
+                onSendQuestion={handleSendQuestion}
+                onOpenUploadModal={() => setShowDocumentsModal(true)}
+                onOpenToolsModal={() => setShowToolsModal(true)}
               />
             </div>
-          ) : (
-            <span className="text-sm font-medium text-slate-500">
-              No document selected
-            </span>
-          )}
-        </header>
 
-        {errorMessage && (
-          <div className="px-6 pt-4">
-            <ErrorState
-              message={errorMessage}
-              onDismiss={() => setErrorMessage(null)}
-            />
+            <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-8">
+              <button
+                type="button"
+                onClick={() =>
+                  handleSendQuestion(
+                    "Surprise me! Give me key takeaways and unique insights from this document."
+                  )
+                }
+                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
+              >
+                <div className="flex items-center gap-2 mb-2 font-semibold text-white">
+                  <span>💬</span>
+                  <span>Surprise me!</span>
+                </div>
+                <p className="text-xs text-slate-400">
+                  Surprise me with a creative idea or key insights.
+                </p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  handleSendQuestion(
+                    "What are the most critical sections and exact page citations in this document?"
+                  )
+                }
+                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
+              >
+                <div className="flex items-center gap-2 mb-2 font-semibold text-white">
+                  <span>👤</span>
+                  <span>Inspect citations</span>
+                </div>
+                <p className="text-xs text-slate-400">
+                  Verify source evidence with grounded page numbers.
+                </p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  handleSendQuestion(
+                    "Summarise this document into clear, concise key points with page references."
+                  )
+                }
+                className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
+              >
+                <div className="flex items-center gap-2 mb-2 font-semibold text-white">
+                  <span>📑</span>
+                  <span>Summarise</span>
+                </div>
+                <p className="text-xs text-slate-400">
+                  Summarise a document or text in seconds.
+                </p>
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 flex flex-col justify-between max-w-3xl w-full mx-auto">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-4">
+              <div className="flex items-center gap-3">
+                <IridescentOrb size="sm" isStreaming={isStreaming} />
+                <div>
+                  <h2 className="text-base font-bold text-white">
+                    DocuMind Grounded Q&A
+                  </h2>
+                  <p className="text-xs text-slate-400 truncate max-w-xs sm:max-w-md">
+                    {selectedDocument?.filename || "Sample PDF"}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMessages([])}
+                className="rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs text-slate-300 hover:text-white"
+              >
+                New Topic
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-4 pr-1 mb-4">
+              {messages.map((message) => (
+                <ChatMessage
+                  key={message.id}
+                  message={message}
+                  onOpenCitationPage={(_id, page, citation) => {
+                    setViewerPage(page);
+                    setViewerCitation(citation);
+                  }}
+                />
+              ))}
+              <div ref={chatBottomRef} />
+            </div>
+
+            <div className="w-full pt-2">
+              <MessageInput
+                disabled={isStreaming}
+                activeDocumentName={selectedDocument?.filename}
+                onSendQuestion={handleSendQuestion}
+                onOpenUploadModal={() => setShowDocumentsModal(true)}
+                onOpenToolsModal={() => setShowToolsModal(true)}
+              />
+            </div>
           </div>
         )}
-
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
-          {!selectedDocument ? (
-            <div className="flex h-full flex-col items-center justify-center text-center">
-              <p className="text-sm font-semibold text-slate-700">
-                Upload a PDF to start asking questions
-              </p>
-              <p className="mt-1 max-w-sm text-xs text-slate-500">
-                DocuMind extracts text page by page, indexes overlapping chunks,
-                and answers with clickable page citations.
-              </p>
-            </div>
-          ) : selectedDocument.status !== "ready" ? (
-            <div className="flex h-full flex-col items-center justify-center text-center">
-              <DocumentStatus
-                status={selectedDocument.status}
-                pageCount={selectedDocument.page_count}
-                errorMessage={selectedDocument.processing_error}
-              />
-              <p className="mt-2 text-xs text-slate-500">
-                {selectedDocument.status === "error"
-                  ? "Please upload a valid text-based PDF to continue."
-                  : "Extracting pages and generating chunk embeddings…"}
-              </p>
-            </div>
-          ) : messages.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center text-center">
-              <p className="text-sm font-semibold text-slate-700">
-                Ready to answer questions on {selectedDocument.filename}
-              </p>
-              <p className="mt-1 max-w-md text-xs text-slate-500">
-                Ask any question in plain language. Every answer is grounded in
-                retrieved passages with verified page badges that open the exact
-                page in the PDF.
-              </p>
-            </div>
-          ) : (
-            messages.map((msg) => (
-              <ChatMessage
-                key={msg.id}
-                message={msg}
-                onOpenCitationPage={(_docId, pageNum, citation) => {
-                  setViewerPage(pageNum);
-                  setViewerCitation(citation);
-                }}
-              />
-            ))
-          )}
-
-          <div className="pt-2">
-            <StreamingIndicator
-              isStreaming={isStreaming}
-              onStopStream={() => abortControllerRef.current?.abort()}
-            />
-          </div>
-          <div ref={chatBottomRef} />
-        </div>
-
-        <footer className="border-t border-slate-200 bg-white px-6 py-4">
-          <MessageInput
-            disabled={
-              !selectedDocument ||
-              selectedDocument.status !== "ready" ||
-              isStreaming
-            }
-            placeholder={
-              !selectedDocument
-                ? "Upload a PDF document first…"
-                : selectedDocument.status !== "ready"
-                ? "Waiting for PDF processing to finish…"
-                : "Ask a question about this PDF (Press Enter to send)…"
-            }
-            onSendQuestion={handleSendQuestion}
-          />
-        </footer>
       </main>
 
-      {selectedDocument && viewerPage && (
-        <PdfPageViewer
-          pdfUrl={docuMindApi.getDocumentPdfUrl(selectedDocument.id)}
-          documentName={selectedDocument.filename}
-          pageCount={selectedDocument.page_count}
-          activePage={viewerPage}
-          activeCitation={viewerCitation}
-          onSelectPage={(newPage) => setViewerPage(newPage)}
-          onClose={() => {
+      {/* MOBILE BOTTOM NAVIGATION BAR */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 border-t border-slate-800 backdrop-blur-xl px-6 py-2.5 flex items-center justify-around">
+        <button
+          type="button"
+          onClick={() => {
+            setMessages([]);
             setViewerPage(null);
-            setViewerCitation(null);
           }}
-        />
+          className="text-sky-400 text-xs font-semibold"
+        >
+          Home
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowDocumentsModal(true)}
+          className="text-slate-400 text-xs"
+        >
+          PDFs
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowHistoryModal(true)}
+          className="text-slate-400 text-xs"
+        >
+          History
+        </button>
+      </div>
+
+      {/* DOCUMENT MODAL */}
+      {showDocumentsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+          <div className="w-full max-w-lg rounded-3xl bg-[#0d131f] border border-slate-800 p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 className="text-base font-bold text-white">Document Library</h3>
+              <button
+                type="button"
+                onClick={() => setShowDocumentsModal(false)}
+                className="text-slate-400 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-4 border-2 border-dashed border-slate-800 rounded-2xl text-center text-xs text-slate-400">
+              <input
+                type="file"
+                accept=".pdf"
+                className="hidden"
+                id="documind-upload-file"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleUploadFile(file);
+                }}
+              />
+              <label
+                htmlFor="documind-upload-file"
+                className="cursor-pointer text-sky-400 hover:underline block"
+              >
+                Click to browse or upload a PDF document
+              </label>
+            </div>
+            <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+              {documents.map((doc) => (
+                <div
+                  key={doc.id}
+                  onClick={() => {
+                    setSelectedDocId(doc.id);
+                    setShowDocumentsModal(false);
+                  }}
+                  className={`p-3 rounded-2xl border cursor-pointer text-xs ${
+                    doc.id === selectedDocId
+                      ? "bg-sky-500/10 border-sky-500/40 text-white"
+                      : "bg-[#090d16] border-slate-800 text-slate-300"
+                  }`}
+                >
+                  <div className="font-semibold truncate">{doc.filename}</div>
+                  <div className="text-[10px] text-slate-500 mt-1">
+                    {doc.status.toUpperCase()} · {doc.page_count || 1} pages
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PDF VIEWER DRAWER */}
+      {selectedDocument && viewerPage && (
+        <aside className="fixed inset-y-0 right-0 z-50 flex h-full w-full max-w-full flex-col border-l border-slate-800 bg-[#090d16]/95 backdrop-blur-2xl shadow-2xl sm:w-[480px] lg:w-[540px]">
+          <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3 bg-[#0d131f]">
+            <span className="rounded-full bg-sky-500/10 border border-sky-500/30 px-2.5 py-0.5 text-xs font-bold text-sky-400">
+              Page {viewerPage}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setViewerPage(null);
+                setViewerCitation(null);
+              }}
+              className="rounded-lg p-1 text-slate-400 hover:text-white"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="p-4 flex-1 overflow-y-auto">
+            {viewerCitation && (
+              <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-4 text-xs text-sky-100 mb-4">
+                <div className="font-bold mb-1">Grounded Excerpt (Page {viewerCitation.page_number}):</div>
+                <div className="italic">“{viewerCitation.excerpt}”</div>
+              </div>
+            )}
+            <p className="text-xs text-slate-400">
+              Viewing page {viewerPage} for {selectedDocument.filename}.
+            </p>
+          </div>
+        </aside>
       )}
     </div>
   );

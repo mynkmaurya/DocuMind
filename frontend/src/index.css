@@ -1,3 +1,101 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#06080e] text-slate-100 antialiased selection:bg-sky-500 selection:text-white;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom iridescent orb animation & glow */
+@keyframes orb-float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.45)) drop-shadow(0 0 65px rgba(129, 140, 248, 0.35));
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02);
+    filter: drop-shadow(0 0 45px rgba(56, 189, 248, 0.6)) drop-shadow(0 0 85px rgba(168, 85, 247, 0.45));
+  }
+}
+
+@keyframes orb-swirl {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.08);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes orb-pulse-light {
+  0%, 100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-orb-float {
+  animation: orb-float 7s ease-in-out infinite;
+}
+
+.animate-orb-swirl {
+  animation: orb-swirl 14s linear infinite;
+}
+
+.animate-orb-pulse {
+  animation: orb-pulse-light 4s ease-in-out infinite;
+}
+
+/* Ambient gradient background matching the screenshot */
+.lix-bg-gradient {
+  background: radial-gradient(circle at 50% 22%, rgba(26, 42, 70, 0.45) 0%, rgba(9, 14, 24, 0.85) 45%, #06080e 85%),
+              radial-gradient(circle at 50% 100%, rgba(14, 76, 110, 0.28) 0%, transparent 65%),
+              #06080e;
+}
+
+/* Dark glassmorphic panels */
+.lix-glass-card {
+  background: rgba(16, 22, 34, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+.lix-glass-card-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lix-glass-card-hover:hover {
+  background: rgba(22, 30, 48, 0.92);
+  border-color: rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 25px 55px -12px rgba(0, 0, 0, 0.75), 0 0 20px 0 rgba(56, 189, 248, 0.15);
+}
+
+/* Custom dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
