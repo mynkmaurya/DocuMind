@@ -460,7 +460,10 @@ export const IridescentOrb: React.FC<{
   size?: "sm" | "md" | "lg";
   className?: string;
   isStreaming?: boolean;
-}> = ({ size = "md", className = "", isStreaming = false }) => {
+  theme?: "dark" | "light";
+}> = ({ size = "md", className = "", isStreaming = false, theme = "dark" }) => {
+  const isLight = theme === "light";
+
   const sizeClasses = {
     sm: "w-20 h-20 sm:w-24 sm:h-24",
     md: "w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48",
@@ -469,57 +472,79 @@ export const IridescentOrb: React.FC<{
 
   return (
     <div
-      className={`relative flex items-center justify-center select-none ${sizeClasses} ${className}`}
+      className={`orb-element relative flex items-center justify-center select-none ${sizeClasses} ${className}`}
       aria-hidden="true"
     >
       <div
-        className={`absolute inset-0 rounded-full blur-2xl opacity-60 transition-all duration-700 pointer-events-none ${
-          isStreaming ? "scale-125 opacity-90 blur-3xl" : "scale-105"
+        className={`orb-element absolute inset-0 rounded-full blur-2xl transition-all duration-700 pointer-events-none ${
+          isStreaming ? "scale-125 opacity-90 blur-3xl" : "scale-105 opacity-70"
         }`}
         style={{
-          background:
-            "radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(148, 163, 184, 0.18) 45%, rgba(51, 65, 85, 0.12) 70%, transparent 85%)",
+          background: isLight
+            ? "radial-gradient(circle, rgba(76, 157, 176, 0.5) 0%, rgba(255, 235, 175, 0.4) 45%, rgba(76, 157, 176, 0.15) 75%, transparent 85%)"
+            : "radial-gradient(circle, rgba(237, 37, 78, 0.45) 0%, rgba(1, 25, 54, 0.6) 45%, rgba(237, 37, 78, 0.2) 75%, transparent 85%)",
         }}
       />
-      <div className="relative w-full h-full rounded-full p-1.5 bg-gradient-to-b from-white/40 via-slate-600/60 to-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.95)]">
-        <div className="relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_-16px_32px_rgba(0,0,0,0.95),inset_0_4px_14px_rgba(255,255,255,0.45)] animate-orb-float border border-white/20">
+      <div
+        className={`orb-element relative w-full h-full rounded-full p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.95)] ${
+          isLight
+            ? "bg-gradient-to-b from-[#4C9DB0]/60 via-[#FFEBAF]/50 to-[#4C9DB0]/30"
+            : "bg-gradient-to-b from-[#ED254E]/50 via-[#011936] to-[#ED254E]/20"
+        }`}
+      >
+        <div
+          className={`orb-element relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_-16px_32px_rgba(0,0,0,0.95),inset_0_4px_14px_rgba(255,255,255,0.45)] animate-orb-float border ${
+            isLight ? "border-[#4C9DB0]/40" : "border-[#ED254E]/40"
+          }`}
+        >
           <div
-            className="absolute inset-0"
+            className="orb-element absolute inset-0"
             style={{
-              background:
-                "radial-gradient(circle at 45% 35%, #1e2638 0%, #0d121c 55%, #030508 100%)",
+              background: isLight
+                ? "radial-gradient(circle at 45% 35%, #4C9DB0 0%, #1d4650 60%, #0c2025 100%)"
+                : "radial-gradient(circle at 45% 35%, #011936 0%, #000c1c 60%, #00050c 100%)",
             }}
           />
           <div
-            className="absolute -inset-1/2 rounded-full opacity-85 mix-blend-screen filter blur-md animate-orb-swirl"
+            className="orb-element absolute -inset-1/2 rounded-full opacity-85 mix-blend-screen filter blur-md animate-orb-swirl"
             style={{
-              background:
-                "conic-gradient(from 180deg at 50% 50%, #ffffff 0deg, #94a3b8 50deg, #1e293b 110deg, #ffffff 170deg, #cbd5e1 240deg, #0f172a 300deg, #ffffff 360deg)",
+              background: isLight
+                ? "conic-gradient(from 180deg at 50% 50%, #FFEBAF 0deg, #4C9DB0 60deg, #0284c7 120deg, #FFEBAF 180deg, #38bdf8 260deg, #0f766e 320deg, #FFEBAF 360deg)"
+                : "conic-gradient(from 180deg at 50% 50%, #ED254E 0deg, #fbbf24 60deg, #011936 120deg, #ED254E 180deg, #f43f5e 260deg, #022045 320deg, #ED254E 360deg)",
             }}
           />
           <div
-            className="absolute -inset-1/3 rounded-full opacity-75 mix-blend-color-dodge filter blur-lg animate-orb-swirl [animation-direction:reverse] [animation-duration:16s]"
+            className="orb-element absolute -inset-1/3 rounded-full opacity-75 mix-blend-color-dodge filter blur-lg animate-orb-swirl [animation-direction:reverse] [animation-duration:16s]"
             style={{
-              background:
-                "conic-gradient(from 45deg at 50% 50%, #f8fafc 0deg, #64748b 80deg, #ffffff 160deg, #334155 240deg, #e2e8f0 310deg, #f8fafc 360deg)",
+              background: isLight
+                ? "conic-gradient(from 45deg at 50% 50%, #ffffff 0deg, #4C9DB0 90deg, #FFEBAF 180deg, #0284c7 270deg, #ffffff 360deg)"
+                : "conic-gradient(from 45deg at 50% 50%, #ffffff 0deg, #ED254E 90deg, #011936 180deg, #fbbf24 270deg, #ffffff 360deg)",
             }}
           />
           <div
-            className="absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full mix-blend-lighten filter blur-sm animate-orb-pulse"
+            className="orb-element absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full mix-blend-lighten filter blur-sm animate-orb-pulse"
             style={{
-              background:
-                "radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.98) 0%, rgba(226, 232, 240, 0.75) 35%, rgba(148, 163, 184, 0.35) 75%, transparent 100%)",
+              background: isLight
+                ? "radial-gradient(circle at 40% 40%, rgba(255, 235, 175, 0.95) 0%, rgba(76, 157, 176, 0.75) 40%, transparent 100%)"
+                : "radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.95) 0%, rgba(237, 37, 78, 0.8) 40%, rgba(1, 25, 54, 0.3) 80%, transparent 100%)",
             }}
           />
           <div
-            className="absolute inset-0 rounded-full pointer-events-none"
+            className="orb-element absolute inset-0 rounded-full pointer-events-none"
             style={{
               boxShadow:
                 "inset 0 0 45px rgba(0, 0, 0, 0.95), inset 0 -18px 30px rgba(0, 0, 0, 0.98), inset 0 2px 10px rgba(255, 255, 255, 0.6)",
             }}
           />
-          <div className="absolute top-1.5 left-5 right-5 h-7 rounded-full bg-gradient-to-b from-white/75 via-white/25 to-transparent blur-[1px] pointer-events-none" />
-          <div className="absolute bottom-1.5 left-7 right-7 h-2 rounded-full bg-gradient-to-t from-white/30 to-transparent blur-[1px] pointer-events-none" />
+          <div className="orb-element absolute top-1.5 left-5 right-5 h-7 rounded-full bg-gradient-to-b from-white/75 via-white/25 to-transparent blur-[1px] pointer-events-none" />
+          <div
+            className="orb-element absolute bottom-1.5 left-7 right-7 h-2 rounded-full blur-[1px] pointer-events-none"
+            style={{
+              background: isLight
+                ? "linear-gradient(to top, rgba(76, 157, 176, 0.5), transparent)"
+                : "linear-gradient(to top, rgba(237, 37, 78, 0.5), transparent)",
+            }}
+          />
         </div>
       </div>
     </div>
@@ -743,6 +768,27 @@ export const App: React.FC = () => {
   const [viewerPage, setViewerPage] = useState<number | null>(null);
   const [viewerCitation, setViewerCitation] = useState<Citation | null>(null);
 
+  // Theme State ("dark" = Cerritos #011936 & Strawberry Gold #ED254E, "light" = Moonstone #4C9DB0 & Vanilla #FFEBAF)
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("documind-theme");
+      if (saved === "light" || saved === "dark") return saved;
+    }
+    return "dark";
+  });
+
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      if (typeof window !== "undefined") {
+        localStorage.setItem("documind-theme", next);
+      }
+      return next;
+    });
+  };
+
+  const isLight = theme === "light";
+
   const abortControllerRef = useRef<AbortController | null>(null);
   const chatBottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -892,11 +938,27 @@ export const App: React.FC = () => {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="min-h-screen w-full lix-bg-gradient text-slate-100 flex flex-col md:flex-row overflow-x-hidden">
+    <div
+      className={`min-h-screen w-full flex flex-col md:flex-row overflow-x-hidden transition-colors duration-300 ${
+        isLight
+          ? "theme-light-canvas text-[#011936]"
+          : "theme-dark-canvas text-slate-100"
+      }`}
+    >
       {/* LEFT NAVIGATION DOCK */}
-      <nav className="hidden md:flex flex-col justify-between items-center py-6 px-4 w-20 shrink-0 border-r border-slate-800/80 bg-[#090d16]/70 backdrop-blur-xl z-30">
+      <nav
+        className={`hidden md:flex flex-col justify-between items-center py-6 px-4 w-20 shrink-0 border-r backdrop-blur-xl z-30 transition-colors ${
+          isLight
+            ? "border-[#4C9DB0]/20 bg-[#FFF5D6]/90"
+            : "border-[#ED254E]/20 bg-[#001126]/90"
+        }`}
+      >
         <div className="flex flex-col items-center gap-6">
-          <div className="font-extrabold text-lg tracking-widest text-white select-none">
+          <div
+            className={`font-extrabold text-lg tracking-widest select-none ${
+              isLight ? "text-[#011936]" : "text-white"
+            }`}
+          >
             LIX
           </div>
           <div className="flex flex-col items-center gap-3.5">
@@ -907,7 +969,11 @@ export const App: React.FC = () => {
                 setViewerPage(null);
               }}
               title="Home / Overview"
-              className="w-10 h-10 rounded-full bg-gradient-to-b from-white via-slate-100 to-slate-300 text-slate-900 flex items-center justify-center shadow-[0_2px_12px_rgba(255,255,255,0.35)] border border-white/80"
+              className={`w-10 h-10 border flex items-center justify-center transition-all ${
+                isLight
+                  ? "bg-[#4C9DB0] hover:bg-[#387c8c] text-white border-[#4C9DB0] shadow-[0_0_15px_rgba(76,157,176,0.5)]"
+                  : "bg-[#ED254E] hover:bg-[#ff3b64] text-white border-[#ED254E] shadow-[0_0_15px_rgba(237,37,78,0.5)]"
+              }`}
             >
               ⌂
             </button>
@@ -915,7 +981,11 @@ export const App: React.FC = () => {
               type="button"
               onClick={() => setShowDocumentsModal((v) => !v)}
               title="Documents & Uploads"
-              className="w-10 h-10 rounded-full border border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 flex items-center justify-center transition-all"
+              className={`w-10 h-10 border flex items-center justify-center transition-all ${
+                isLight
+                  ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
+                  : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+              }`}
             >
               📄
             </button>
@@ -923,7 +993,11 @@ export const App: React.FC = () => {
               type="button"
               onClick={() => setShowHistoryModal((v) => !v)}
               title="Chat History"
-              className="w-10 h-10 rounded-full border border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 flex items-center justify-center transition-all"
+              className={`w-10 h-10 border flex items-center justify-center transition-all ${
+                isLight
+                  ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
+                  : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+              }`}
             >
               🕒
             </button>
@@ -931,7 +1005,11 @@ export const App: React.FC = () => {
               type="button"
               onClick={() => handleCreateConversation()}
               title="New Chat Session"
-              className="w-10 h-10 rounded-full border border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 flex items-center justify-center transition-all"
+              className={`w-10 h-10 border flex items-center justify-center transition-all ${
+                isLight
+                  ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
+                  : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+              }`}
             >
               +
             </button>
@@ -942,14 +1020,38 @@ export const App: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowToolsModal((v) => !v)}
-            className="w-9 h-9 text-slate-400 hover:text-white flex items-center justify-center"
+            className={`w-9 h-9 border flex items-center justify-center transition-colors ${
+              isLight
+                ? "border-[#4C9DB0]/30 text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
+                : "border-[#ED254E]/20 text-slate-400 hover:border-[#ED254E] hover:text-white"
+            }`}
           >
             ⚙
           </button>
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 p-0.5 shadow-md">
-            <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xs font-bold text-sky-300">
-              H
-            </div>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            title={
+              isLight
+                ? "Switch to Dark Mode (Cerritos & Strawberry Gold)"
+                : "Switch to Light Mode (Moonstone & Vanilla)"
+            }
+            className={`w-9 h-9 border flex items-center justify-center transition-all ${
+              isLight
+                ? "border-[#4C9DB0] bg-[#4C9DB0] text-white shadow-[0_0_12px_rgba(76,157,176,0.6)]"
+                : "border-[#ED254E] bg-[#ED254E]/20 text-[#ED254E] hover:bg-[#ED254E] hover:text-white shadow-[0_0_12px_rgba(237,37,78,0.4)]"
+            }`}
+          >
+            {isLight ? "☀️" : "🌙"}
+          </button>
+          <div
+            className={`w-9 h-9 border flex items-center justify-center font-bold text-xs ${
+              isLight
+                ? "border-[#4C9DB0] bg-[#FFF8E6] text-[#4C9DB0]"
+                : "border-[#ED254E] bg-[#001126] text-[#ED254E]"
+            }`}
+          >
+            H
           </div>
         </div>
       </nav>
@@ -978,17 +1080,29 @@ export const App: React.FC = () => {
         {!hasMessages ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center my-auto pt-2 pb-6">
             <div className="mb-6 sm:mb-8">
-              <IridescentOrb size="md" isStreaming={isStreaming} />
+              <IridescentOrb size="md" isStreaming={isStreaming} theme={theme} />
             </div>
 
             <div className="space-y-1 sm:space-y-2 mb-8">
-              <div className="text-xs sm:text-sm font-medium text-slate-400 tracking-wide">
+              <div
+                className={`text-xs sm:text-sm font-medium tracking-wide ${
+                  isLight ? "text-[#4C9DB0] font-semibold" : "text-slate-400"
+                }`}
+              >
                 Hi, Hendricks
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
+              <h1
+                className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight ${
+                  isLight ? "text-[#011936]" : "text-white"
+                }`}
+              >
                 How can I help today?
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto pt-1 leading-relaxed">
+              <p
+                className={`text-xs sm:text-sm max-w-md mx-auto pt-1 leading-relaxed ${
+                  isLight ? "text-[#2e4d58]" : "text-slate-400"
+                }`}
+              >
                 I'm here to help — from quick answers to smart recommendations.
               </p>
             </div>
@@ -996,6 +1110,7 @@ export const App: React.FC = () => {
             <div className="w-full max-w-2xl">
               <MessageInput
                 disabled={isStreaming}
+                theme={theme}
                 activeDocumentName={selectedDocument?.filename}
                 onSendQuestion={handleSendQuestion}
                 onOpenUploadModal={() => setShowDocumentsModal(true)}

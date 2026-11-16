@@ -4,6 +4,7 @@ interface MessageInputProps {
   disabled: boolean;
   placeholder?: string;
   activeDocumentName?: string | null;
+  theme?: "dark" | "light";
   onSendQuestion: (question: string) => void;
   onOpenUploadModal?: () => void;
   onOpenToolsModal?: () => void;
@@ -13,6 +14,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   disabled,
   placeholder = "Ask me anything...",
   activeDocumentName,
+  theme = "dark",
   onSendQuestion,
   onOpenUploadModal,
   onOpenToolsModal,
@@ -20,6 +22,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   const [question, setQuestion] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const isLight = theme === "light";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,19 +47,35 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
   return (
     <div className="w-full max-w-2xl mx-auto transition-transform duration-300">
-      {/* Outer container card with metallic chrome border highlight matching Figma */}
+      {/* Outer container card with straight edges and theme border */}
       <div
-        className={`relative rounded-3xl p-1 bg-gradient-to-b from-[#141a27]/90 via-[#0e131e]/95 to-[#080b12]/98 border transition-all duration-300 backdrop-blur-2xl ${
-          isFocused
-            ? "border-white/30 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(255,255,255,0.12)] scale-[1.006]"
-            : "border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.75)]"
+        className={`relative p-1 border transition-all duration-300 backdrop-blur-2xl ${
+          isLight
+            ? isFocused
+              ? "bg-[#FFFDF7] border-[#4C9DB0] shadow-[0_20px_50px_rgba(76,157,176,0.25)]"
+              : "bg-[#FFF9E6]/95 border-[#4C9DB0]/40 shadow-[0_15px_40px_rgba(76,157,176,0.15)]"
+            : isFocused
+            ? "bg-[#011936] border-[#ED254E] shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_30px_rgba(237,37,78,0.3)]"
+            : "bg-[#011936]/90 border-[#ED254E]/30 shadow-[0_20px_50px_rgba(0,0,0,0.75)]"
         }`}
       >
         {/* Top banner: Unlock more features with Pro + Explore Pro ↗ */}
-        <div className="flex items-center justify-between px-4 pt-2.5 pb-2 text-[11px] sm:text-xs font-medium text-slate-300">
-          <div className="flex items-center gap-1.5 text-slate-200">
-            <span className="text-white/80">✦</span>
-            <span className="font-semibold text-slate-200">
+        <div
+          className={`flex items-center justify-between px-4 pt-2.5 pb-2 text-[11px] sm:text-xs font-medium border-b ${
+            isLight
+              ? "border-[#4C9DB0]/20 text-[#011936]"
+              : "border-white/5 text-slate-300"
+          }`}
+        >
+          <div className="flex items-center gap-1.5">
+            <span className={isLight ? "text-[#4C9DB0]" : "text-[#ED254E]"}>
+              ✦
+            </span>
+            <span
+              className={`font-semibold ${
+                isLight ? "text-[#011936]" : "text-slate-200"
+              }`}
+            >
               {activeDocumentName
                 ? `Grounded on: ${activeDocumentName}`
                 : "Unlock more features with Pro"}
@@ -64,17 +84,25 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           <button
             type="button"
             onClick={onOpenToolsModal}
-            className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white transition-colors"
+            className={`flex items-center gap-1 text-[11px] transition-colors ${
+              isLight
+                ? "text-[#4C9DB0] hover:text-[#2d6774] font-medium"
+                : "text-slate-400 hover:text-[#ED254E]"
+            }`}
           >
             <span>Explore Pro</span>
             <span className="text-[12px]">↗</span>
           </button>
         </div>
 
-        {/* Inner dark input area */}
+        {/* Inner straight input area */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl bg-[#070a10] border border-white/5 p-3 sm:p-4 transition-colors duration-200"
+          className={`border p-3 sm:p-4 transition-colors duration-200 ${
+            isLight
+              ? "bg-[#FFFFFF] border-[#4C9DB0]/20"
+              : "bg-[#001126] border-white/5"
+          }`}
         >
           <label htmlFor="documind-question-input" className="sr-only">
             Ask me anything
@@ -99,20 +127,34 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 handleSubmit(e);
               }
             }}
-            className="w-full resize-none bg-transparent px-2 pt-1 pb-2 text-sm sm:text-base text-slate-100 placeholder:text-slate-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 min-h-[40px] transition-all"
+            className={`w-full resize-none bg-transparent px-2 pt-1 pb-2 text-sm sm:text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 min-h-[40px] transition-all ${
+              isLight
+                ? "text-[#011936] placeholder:text-[#4C9DB0]/60"
+                : "text-slate-100 placeholder:text-slate-500"
+            }`}
           />
 
           {/* Bottom toolbar inside input box */}
-          <div className="flex items-center justify-between pt-2 border-t border-white/5 mt-1">
-            {/* Left buttons: Import file & Tools matching Figma capsule style */}
+          <div
+            className={`flex items-center justify-between pt-2 border-t mt-1 ${
+              isLight ? "border-[#4C9DB0]/20" : "border-white/5"
+            }`}
+          >
+            {/* Left buttons: Import file & Tools */}
             <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
                 onClick={onOpenUploadModal}
-                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#121724]/90 hover:bg-[#1a2234] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-all focus:outline-none"
+                className={`btn-tactile inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-medium transition-all focus:outline-none ${
+                  isLight
+                    ? "border-[#4C9DB0]/40 bg-[#FFEBAF] hover:bg-[#4C9DB0] text-[#011936] hover:text-white"
+                    : "border-[#ED254E]/30 bg-[#011936] hover:border-[#ED254E] text-slate-200 hover:text-white"
+                }`}
               >
                 <svg
-                  className="w-3.5 h-3.5 text-slate-400"
+                  className={`w-3.5 h-3.5 ${
+                    isLight ? "text-[#4C9DB0]" : "text-slate-400"
+                  }`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -130,10 +172,16 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               <button
                 type="button"
                 onClick={onOpenToolsModal}
-                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#121724]/90 hover:bg-[#1a2234] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-all focus:outline-none"
+                className={`btn-tactile inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-medium transition-all focus:outline-none ${
+                  isLight
+                    ? "border-[#4C9DB0]/40 bg-[#FFEBAF] hover:bg-[#4C9DB0] text-[#011936] hover:text-white"
+                    : "border-[#ED254E]/30 bg-[#011936] hover:border-[#ED254E] text-slate-200 hover:text-white"
+                }`}
               >
                 <svg
-                  className="w-3.5 h-3.5 text-slate-400"
+                  className={`w-3.5 h-3.5 ${
+                    isLight ? "text-[#4C9DB0]" : "text-slate-400"
+                  }`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -149,27 +197,39 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               </button>
             </div>
 
-            {/* Right buttons: Sparkle Model dropdown & Glossy Liquid Chrome Send Button */}
+            {/* Right buttons: Sparkle Model dropdown & Send Button */}
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={onOpenToolsModal}
                 title="AI Model Selector"
-                className="flex items-center gap-1 text-slate-400 hover:text-white text-xs transition-colors p-1"
+                className={`flex items-center gap-1 text-xs transition-colors p-1 ${
+                  isLight
+                    ? "text-[#4C9DB0] hover:text-[#011936]"
+                    : "text-slate-400 hover:text-[#ED254E]"
+                }`}
               >
                 <span className="text-sm">✦</span>
                 <span className="text-[10px]">▾</span>
               </button>
 
-              {/* Glossy Liquid Chrome Circular Send Button matching Figma */}
+              {/* Square Send Button */}
               <button
                 type="submit"
                 disabled={disabled || !hasContent}
                 aria-label="Send question"
-                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-slate-300 via-white to-slate-400 hover:from-white hover:to-slate-200 active:scale-90 text-slate-950 flex items-center justify-center font-black transition-all duration-200 shadow-[0_2px_12px_rgba(255,255,255,0.4)] border border-white/80 ${
-                  hasContent && !disabled
-                    ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.6)]"
-                    : "opacity-50 cursor-not-allowed scale-100"
+                className={`w-8 h-8 sm:w-9 sm:h-9 border flex items-center justify-center font-black transition-all duration-200 ${
+                  isLight
+                    ? `bg-[#4C9DB0] hover:bg-[#387c8c] text-white border-[#4C9DB0] ${
+                        hasContent && !disabled
+                          ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_15px_rgba(76,157,176,0.6)]"
+                          : "opacity-40 cursor-not-allowed scale-100"
+                      }`
+                    : `bg-[#ED254E] hover:bg-[#ff3b64] text-white border-[#ED254E] ${
+                        hasContent && !disabled
+                          ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_20px_rgba(237,37,78,0.7)]"
+                          : "opacity-40 cursor-not-allowed scale-100"
+                      }`
                 }`}
               >
                 <svg

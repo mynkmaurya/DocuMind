@@ -38,6 +38,27 @@ export const App: React.FC = () => {
   const [viewerPage, setViewerPage] = useState<number | null>(null);
   const [viewerCitation, setViewerCitation] = useState<Citation | null>(null);
 
+  // Theme State ("dark" = Cerritos #011936 & Strawberry Gold #ED254E, "light" = Moonstone #4C9DB0 & Vanilla #FFEBAF)
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("documind-theme");
+      if (saved === "light" || saved === "dark") return saved;
+    }
+    return "dark";
+  });
+
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      if (typeof window !== "undefined") {
+        localStorage.setItem("documind-theme", next);
+      }
+      return next;
+    });
+  };
+
+  const isLight = theme === "light";
+
   const abortControllerRef = useRef<AbortController | null>(null);
   const chatBottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -277,15 +298,31 @@ export const App: React.FC = () => {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="min-h-screen w-full lix-bg-gradient text-slate-100 flex items-center justify-center p-0 md:p-4 lg:p-6 overflow-x-hidden selection:bg-cyan-500 selection:text-white">
-      {/* Outer App Frame (Matching desktop app canvas in mockup) */}
-      <div className="w-full h-full min-h-screen md:min-h-[92vh] max-w-[1440px] bg-[#070b10]/95 md:rounded-[36px] border-0 md:border md:border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.85)] flex flex-col md:flex-row overflow-hidden relative backdrop-blur-2xl">
+    <div
+      className={`min-h-screen w-full flex items-center justify-center p-0 md:p-4 lg:p-6 overflow-x-hidden transition-colors duration-300 ${
+        isLight
+          ? "theme-light-canvas text-[#011936] selection:bg-[#4C9DB0] selection:text-white"
+          : "theme-dark-canvas text-slate-100 selection:bg-[#ED254E] selection:text-white"
+      }`}
+    >
+      {/* Outer App Frame (Straight brutalist geometry matching request) */}
+      <div
+        className={`w-full h-full min-h-screen md:min-h-[92vh] max-w-[1440px] border flex flex-col md:flex-row overflow-hidden relative backdrop-blur-2xl transition-colors duration-300 ${
+          isLight
+            ? "bg-[#FFEBAF]/90 border-[#4C9DB0]/40 shadow-[0_30px_90px_rgba(76,157,176,0.2)]"
+            : "bg-[#011936]/90 border-[#ED254E]/25 shadow-[0_30px_90px_rgba(0,0,0,0.85)]"
+        }`}
+      >
         {/* ==================================================================== */}
-        {/* LEFT NAVIGATION DOCK (Matching Figma / Mockup Design)                */}
+        {/* LEFT NAVIGATION DOCK (Straight Lines & Theme Accents)                */}
         {/* ==================================================================== */}
         <nav
           aria-label="Navigation dock"
-          className="hidden md:flex flex-col justify-between items-center py-7 px-3.5 w-[76px] shrink-0 border-r border-white/5 bg-[#06090e]/80 backdrop-blur-2xl z-30 transition-all duration-300"
+          className={`hidden md:flex flex-col justify-between items-center py-7 px-3.5 w-[76px] shrink-0 border-r backdrop-blur-2xl z-30 transition-colors duration-300 ${
+            isLight
+              ? "bg-[#FFF5D6]/90 border-[#4C9DB0]/20"
+              : "bg-[#001126]/90 border-[#ED254E]/20"
+          }`}
         >
           {/* Top Brand Logo & Navigation Controls */}
           <div className="flex flex-col items-center gap-6 w-full">
@@ -295,13 +332,17 @@ export const App: React.FC = () => {
                 setMessages([]);
                 setViewerPage(null);
               }}
-              className="font-extrabold text-base tracking-widest text-white select-none hover:opacity-80 transition-opacity cursor-pointer pt-1"
+              className={`font-extrabold text-base tracking-widest select-none cursor-pointer pt-1 transition-colors ${
+                isLight
+                  ? "text-[#011936] hover:text-[#4C9DB0]"
+                  : "text-white hover:text-[#ED254E]"
+              }`}
             >
               LIX
             </div>
 
             <div className="flex flex-col items-center gap-3.5 w-full">
-              {/* Active Home Button: Glossy Liquid Chrome from Figma */}
+              {/* Active Home Button: Straight Square */}
               <button
                 type="button"
                 onClick={() => {
@@ -309,7 +350,11 @@ export const App: React.FC = () => {
                   setViewerPage(null);
                 }}
                 title="Home / Overview"
-                className="btn-tactile w-10 h-10 rounded-full bg-gradient-to-b from-white via-slate-100 to-slate-300 text-slate-900 flex items-center justify-center shadow-[0_2px_12px_rgba(255,255,255,0.35)] border border-white/80"
+                className={`btn-tactile w-10 h-10 border flex items-center justify-center transition-all ${
+                  isLight
+                    ? "bg-[#4C9DB0] hover:bg-[#387c8c] text-white border-[#4C9DB0] shadow-[0_0_15px_rgba(76,157,176,0.5)]"
+                    : "bg-[#ED254E] hover:bg-[#ff3b64] text-white border-[#ED254E] shadow-[0_0_15px_rgba(237,37,78,0.5)]"
+                }`}
               >
                 <svg
                   className="w-5 h-5 fill-current"
@@ -319,15 +364,19 @@ export const App: React.FC = () => {
                 </svg>
               </button>
 
-              {/* Document Manager Button: Circular Outline */}
+              {/* Document Manager Button: Straight Square */}
               <button
                 type="button"
                 onClick={() => setShowDocumentsModal((v) => !v)}
                 title="Documents & Uploads"
-                className={`btn-tactile w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
+                className={`btn-tactile w-10 h-10 border flex items-center justify-center transition-all ${
                   showDocumentsModal
-                    ? "border-white/40 bg-white/10 text-white"
-                    : "border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5"
+                    ? isLight
+                      ? "border-[#4C9DB0] bg-[#4C9DB0] text-white"
+                      : "border-[#ED254E] bg-[#ED254E] text-white"
+                    : isLight
+                    ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:border-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
+                    : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
                 }`}
               >
                 <svg
@@ -345,15 +394,19 @@ export const App: React.FC = () => {
                 </svg>
               </button>
 
-              {/* History / Clock Icon Button: Circular Outline */}
+              {/* History / Clock Icon Button: Straight Square */}
               <button
                 type="button"
                 onClick={() => setShowHistoryModal((v) => !v)}
                 title="Chat History"
-                className={`btn-tactile w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
+                className={`btn-tactile w-10 h-10 border flex items-center justify-center transition-all ${
                   showHistoryModal
-                    ? "border-white/40 bg-white/10 text-white"
-                    : "border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5"
+                    ? isLight
+                      ? "border-[#4C9DB0] bg-[#4C9DB0] text-white"
+                      : "border-[#ED254E] bg-[#ED254E] text-white"
+                    : isLight
+                    ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:border-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
+                    : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
                 }`}
               >
                 <svg
@@ -371,12 +424,16 @@ export const App: React.FC = () => {
                 </svg>
               </button>
 
-              {/* New Chat Button: Circular Outline (+) */}
+              {/* New Chat Button: Straight Square */}
               <button
                 type="button"
                 onClick={handleCreateConversation}
                 title="New Chat Session"
-                className="btn-tactile w-10 h-10 rounded-full border border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5 flex items-center justify-center transition-all"
+                className={`btn-tactile w-10 h-10 border flex items-center justify-center transition-all ${
+                  isLight
+                    ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:border-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
+                    : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+                }`}
               >
                 <svg
                   className="w-4 h-4"
@@ -402,7 +459,11 @@ export const App: React.FC = () => {
               type="button"
               onClick={() => setShowToolsModal((v) => !v)}
               title="Settings & RAG Tools"
-              className="btn-tactile w-9 h-9 rounded-full text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+              className={`btn-tactile w-9 h-9 border flex items-center justify-center transition-colors ${
+                isLight
+                  ? "border-[#4C9DB0]/30 text-[#011936] hover:border-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
+                  : "border-[#ED254E]/20 text-slate-400 hover:border-[#ED254E] hover:text-white"
+              }`}
             >
               <svg
                 className="w-4 h-4"
@@ -424,35 +485,60 @@ export const App: React.FC = () => {
               </svg>
             </button>
 
-            {/* Theme / Moon Toggle Icon from Figma */}
+            {/* Functional Theme Toggle Button (Light/Dark) */}
             <button
               type="button"
-              title="Dark mode"
-              className="btn-tactile w-9 h-9 rounded-full text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+              onClick={toggleTheme}
+              title={
+                isLight
+                  ? "Switch to Dark Mode (Cerritos #011936 & Strawberry Gold #ED254E)"
+                  : "Switch to Light Mode (Moonstone #4C9DB0 & Vanilla #FFEBAF)"
+              }
+              className={`btn-tactile w-9 h-9 border flex items-center justify-center transition-all ${
+                isLight
+                  ? "border-[#4C9DB0] bg-[#4C9DB0] text-white shadow-[0_0_12px_rgba(76,157,176,0.6)]"
+                  : "border-[#ED254E] bg-[#ED254E]/20 text-[#ED254E] hover:bg-[#ED254E] hover:text-white shadow-[0_0_12px_rgba(237,37,78,0.4)]"
+              }`}
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                />
-              </svg>
+              {isLight ? (
+                /* Sun Icon */
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="5" />
+                  <path strokeLinecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                </svg>
+              ) : (
+                /* Moon Icon */
+                <svg
+                  className="w-4 h-4 fill-none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                  />
+                </svg>
+              )}
             </button>
 
-            {/* User Profile Avatar with sleek silver ring */}
+            {/* User Profile Avatar with Straight Square Frame */}
             <div
               title="Logged in as Hendricks"
-              className="w-9 h-9 rounded-full p-[1.5px] border border-white/30 shadow-md select-none cursor-pointer btn-tactile overflow-hidden bg-slate-800"
+              className={`w-9 h-9 border shadow-md select-none cursor-pointer btn-tactile overflow-hidden flex items-center justify-center font-bold text-xs ${
+                isLight
+                  ? "border-[#4C9DB0] bg-[#FFF8E6] text-[#4C9DB0]"
+                  : "border-[#ED254E] bg-[#001126] text-[#ED254E]"
+              }`}
             >
-              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xs font-bold text-slate-200">
-                H
-              </div>
+              H
             </div>
           </div>
         </nav>
@@ -462,154 +548,257 @@ export const App: React.FC = () => {
         {/* ==================================================================== */}
         <div className="flex-1 flex flex-col justify-between min-h-screen md:min-h-0 relative overflow-y-auto">
           {/* Top Header Bar */}
-          <header className="w-full flex items-center justify-between px-5 sm:px-8 md:px-10 py-5 text-xs text-slate-400 z-20">
+          <header
+            className={`w-full flex items-center justify-between px-5 sm:px-8 md:px-10 py-5 text-xs z-20 border-b ${
+              isLight
+                ? "border-[#4C9DB0]/20 text-[#011936]"
+                : "border-white/5 text-slate-400"
+            }`}
+          >
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-white tracking-widest text-sm md:hidden">
+              <span
+                className={`font-extrabold tracking-widest text-sm md:hidden ${
+                  isLight ? "text-[#011936]" : "text-white"
+                }`}
+              >
                 LIX
               </span>
-              <span className="font-semibold text-white tracking-tight text-sm">
+              <span
+                className={`font-semibold tracking-tight text-sm ${
+                  isLight ? "text-[#011936]" : "text-white"
+                }`}
+              >
                 DocuMind
               </span>
-              <span className="text-[10px] font-bold text-slate-300 bg-white/10 border border-white/15 px-2 py-0.5 rounded-full tracking-wider">
+              <span
+                className={`border px-2 py-0.5 text-[10px] font-bold tracking-wider ${
+                  isLight
+                    ? "border-[#4C9DB0] bg-[#4C9DB0]/15 text-[#4C9DB0]"
+                    : "border-[#ED254E] bg-[#ED254E]/15 text-[#ED254E]"
+                }`}
+              >
                 BETA
               </span>
             </div>
 
             <div
               onClick={() => setShowDocumentsModal(true)}
-              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer select-none bg-white/5 md:bg-transparent px-3 py-1 md:p-0 rounded-full border border-white/5 md:border-0"
+              className={`flex items-center gap-1.5 transition-colors cursor-pointer select-none px-3 py-1 border ${
+                isLight
+                  ? "border-[#4C9DB0]/30 bg-[#FFFDF7] text-[#011936] hover:border-[#4C9DB0]"
+                  : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+              }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-              <span className="font-medium text-slate-300">Personal workspace</span>
-              <span className="text-[10px] text-slate-500">▾</span>
+              <span
+                className={`w-1.5 h-1.5 ${
+                  isLight ? "bg-[#4C9DB0]" : "bg-[#ED254E]"
+                }`}
+              />
+              <span className="font-medium">Personal workspace</span>
+              <span className="text-[10px]">▾</span>
             </div>
           </header>
 
           {/* Main Center Stage */}
-        <main className="flex-1 flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-16 py-4 max-w-5xl mx-auto w-full relative z-10 pb-20 md:pb-6">
-          {/* Error Notification Banner */}
-          {errorMessage && (
-            <div className="w-full max-w-2xl mx-auto mb-4 animate-fade-in-down">
-              <ErrorState
-                message={errorMessage}
-                onDismiss={() => setErrorMessage(null)}
-              />
-            </div>
-          )}
-
-          {/* HERO VIEW (Matching the Figma design screenshot) */}
-          {!hasMessages ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-center my-auto pt-1 pb-4 animate-fade-in-up">
-              {/* The Liquid Chrome Sphere from Figma */}
-              <div className="mb-6 sm:mb-7">
-                <IridescentOrb
-                  size="md"
-                  isStreaming={isStreaming}
-                  onClick={() => {
-                    handleSendQuestion(
-                      "Hello! What is this document about and what questions can I ask?"
-                    );
-                  }}
+          <main className="flex-1 flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-16 py-4 max-w-5xl mx-auto w-full relative z-10 pb-20 md:pb-6">
+            {/* Error Notification Banner */}
+            {errorMessage && (
+              <div className="w-full max-w-2xl mx-auto mb-4 animate-fade-in-down">
+                <ErrorState
+                  message={errorMessage}
+                  onDismiss={() => setErrorMessage(null)}
                 />
               </div>
+            )}
 
-              {/* Greeting Typography matching Figma */}
-              <div className="space-y-1.5 mb-7 animate-fade-in-up stagger-1">
-                <div className="text-xs sm:text-sm font-medium text-slate-400 tracking-wide">
-                  Hi, Hendricks
+            {/* HERO VIEW */}
+            {!hasMessages ? (
+              <div className="flex-1 flex flex-col items-center justify-center text-center my-auto pt-1 pb-4 animate-fade-in-up">
+                {/* The Iridescent Nebula Orb (Explicitly exempt from straight edges) */}
+                <div className="mb-6 sm:mb-7">
+                  <IridescentOrb
+                    size="md"
+                    theme={theme}
+                    isStreaming={isStreaming}
+                    onClick={() => {
+                      handleSendQuestion(
+                        "Hello! What is this document about and what questions can I ask?"
+                      );
+                    }}
+                  />
                 </div>
-                <h1 className="text-3xl sm:text-4xl md:text-[42px] font-bold tracking-tight text-white drop-shadow-sm">
-                  How can I help today?
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto pt-0.5 leading-relaxed">
-                  I'm here to help — from quick answers to smart recommendations.
-                </p>
-              </div>
 
-              {/* Central Floating Prompt Box */}
-              <div className="w-full max-w-2xl animate-fade-in-up stagger-2">
-                <MessageInput
-                  disabled={isStreaming}
-                  activeDocumentName={selectedDocument?.filename}
-                  onSendQuestion={handleSendQuestion}
-                  onOpenUploadModal={() => setShowDocumentsModal(true)}
-                  onOpenToolsModal={() => setShowToolsModal(true)}
-                />
-              </div>
-
-              {/* Quick Action Cards Grid (Bottom) matching Mockup */}
-              <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-7 animate-fade-in-up stagger-3">
-                {/* Card 1: Surprise me! */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSendQuestion(
-                      "Surprise me! Give me creative ideas, unusual connections, and key insights from this document."
-                    )
-                  }
-                  className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm text-slate-300">💬</span>
-                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-slate-200 transition-colors">
-                      Surprise me!
-                    </span>
+                {/* Greeting Typography */}
+                <div className="space-y-1.5 mb-7 animate-fade-in-up stagger-1">
+                  <div
+                    className={`text-xs sm:text-sm font-medium tracking-wide ${
+                      isLight ? "text-[#4C9DB0] font-semibold" : "text-slate-400"
+                    }`}
+                  >
+                    Hi, Hendricks
                   </div>
-                  <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
-                    Surprise me with a creative idea or key insights.
+                  <h1
+                    className={`text-3xl sm:text-4xl md:text-[42px] font-bold tracking-tight drop-shadow-sm ${
+                      isLight ? "text-[#011936]" : "text-white"
+                    }`}
+                  >
+                    How can I help today?
+                  </h1>
+                  <p
+                    className={`text-xs sm:text-sm max-w-md mx-auto pt-0.5 leading-relaxed ${
+                      isLight ? "text-[#2e4d58]" : "text-slate-400"
+                    }`}
+                  >
+                    I'm here to help — from quick answers to smart recommendations.
                   </p>
-                </button>
+                </div>
 
-                {/* Card 2: Inspect citations */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSendQuestion(
-                      "What are the most critical sections and exact page citations in this document?"
-                    )
-                  }
-                  className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
+                {/* Central Floating Prompt Box */}
+                <div className="w-full max-w-2xl animate-fade-in-up stagger-2">
+                  <MessageInput
+                    disabled={isStreaming}
+                    theme={theme}
+                    activeDocumentName={selectedDocument?.filename}
+                    onSendQuestion={handleSendQuestion}
+                    onOpenUploadModal={() => setShowDocumentsModal(true)}
+                    onOpenToolsModal={() => setShowToolsModal(true)}
+                  />
+                </div>
+
+                {/* Quick Action Cards Grid (Bottom) - Straight Brutalist Rectangles */}
+                <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-7 animate-fade-in-up stagger-3">
+                  {/* Card 1: Surprise me! */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSendQuestion(
+                        "Surprise me! Give me creative ideas, unusual connections, and key insights from this document."
+                      )
+                    }
+                    className={`p-4 text-left flex flex-col justify-between group cursor-pointer border ${
+                      isLight ? "card-light" : "card-dark"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span
+                        className={`text-sm ${
+                          isLight ? "text-[#4C9DB0]" : "text-[#ED254E]"
+                        }`}
+                      >
+                        💬
+                      </span>
+                      <span
+                        className={`text-xs sm:text-sm font-semibold transition-colors ${
+                          isLight
+                            ? "text-[#011936] group-hover:text-[#4C9DB0]"
+                            : "text-white group-hover:text-[#ED254E]"
+                        }`}
+                      >
+                        Surprise me!
+                      </span>
+                    </div>
+                    <p
+                      className={`text-[11px] sm:text-xs leading-relaxed ${
+                        isLight ? "text-[#395d6a]" : "text-slate-400"
+                      }`}
+                    >
+                      Surprise me with a creative idea or key insights.
+                    </p>
+                  </button>
+
+                  {/* Card 2: Inspect citations */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSendQuestion(
+                        "What are the most critical sections and exact page citations in this document?"
+                      )
+                    }
+                    className={`p-4 text-left flex flex-col justify-between group cursor-pointer border ${
+                      isLight ? "card-light" : "card-dark"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span
+                        className={`text-sm ${
+                          isLight ? "text-[#4C9DB0]" : "text-[#ED254E]"
+                        }`}
+                      >
+                        👤
+                      </span>
+                      <span
+                        className={`text-xs sm:text-sm font-semibold transition-colors ${
+                          isLight
+                            ? "text-[#011936] group-hover:text-[#4C9DB0]"
+                            : "text-white group-hover:text-[#ED254E]"
+                        }`}
+                      >
+                        Inspect citations
+                      </span>
+                    </div>
+                    <p
+                      className={`text-[11px] sm:text-xs leading-relaxed ${
+                        isLight ? "text-[#395d6a]" : "text-slate-400"
+                      }`}
+                    >
+                      Verify source evidence with grounded page numbers.
+                    </p>
+                  </button>
+
+                  {/* Card 3: Summarise */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSendQuestion(
+                        "Summarise this document into clear, concise key points with page references."
+                      )
+                    }
+                    className={`p-4 text-left flex flex-col justify-between group cursor-pointer border ${
+                      isLight ? "card-light" : "card-dark"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span
+                        className={`text-sm ${
+                          isLight ? "text-[#4C9DB0]" : "text-[#ED254E]"
+                        }`}
+                      >
+                        📄
+                      </span>
+                      <span
+                        className={`text-xs sm:text-sm font-semibold transition-colors ${
+                          isLight
+                            ? "text-[#011936] group-hover:text-[#4C9DB0]"
+                            : "text-white group-hover:text-[#ED254E]"
+                        }`}
+                      >
+                        Summarise
+                      </span>
+                    </div>
+                    <p
+                      className={`text-[11px] sm:text-xs leading-relaxed ${
+                        isLight ? "text-[#395d6a]" : "text-slate-400"
+                      }`}
+                    >
+                      Summarise a document or text in seconds.
+                    </p>
+                  </button>
+                </div>
+
+                {/* Bottom Security / Privacy Footer */}
+                <div
+                  className={`mt-8 flex items-center justify-center gap-1.5 text-[11px] font-normal ${
+                    isLight ? "text-[#4C9DB0]" : "text-slate-500"
+                  }`}
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm text-slate-300">👤</span>
-                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-slate-200 transition-colors">
-                      Inspect citations
-                    </span>
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
-                    Verify source evidence with grounded page numbers.
-                  </p>
-                </button>
-
-                {/* Card 3: Summarise */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSendQuestion(
-                      "Summarise this document into clear, concise key points with page references."
-                    )
-                  }
-                  className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm text-slate-300">📄</span>
-                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-slate-200 transition-colors">
-                      Summarise
-                    </span>
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
-                    Summarise a document or text in seconds.
-                  </p>
-                </button>
+                  <span>🔒</span>
+                  <span>
+                    Your ideas stay yours. Private, secure, and grounded in your
+                    documents.
+                  </span>
+                </div>
               </div>
-
-              {/* Bottom Security / Privacy Footer from Figma */}
-              <div className="mt-8 flex items-center justify-center gap-1.5 text-[11px] text-slate-500 font-normal">
-                <span>🔒</span>
-                <span>Your ideas stay yours. Private, secure, and grounded in your documents.</span>
-              </div>
-            </div>
-          ) : (
+            ) : (
             /* ============================================================== */
             /* CHAT CONVERSATION STREAM VIEW                                  */
             /* ============================================================== */
@@ -665,6 +854,7 @@ export const App: React.FC = () => {
               <div className="w-full pt-2">
                 <MessageInput
                   disabled={isStreaming}
+                  theme={theme}
                   activeDocumentName={selectedDocument?.filename}
                   onSendQuestion={handleSendQuestion}
                   onOpenUploadModal={() => setShowDocumentsModal(true)}
@@ -682,14 +872,25 @@ export const App: React.FC = () => {
       {/* ==================================================================== */}
       {/* MOBILE BOTTOM NAVIGATION BAR (< 768px Phones & Tablets)             */}
       {/* ==================================================================== */}
-      <div className="md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-40 bg-[#070d14]/90 border border-white/10 backdrop-blur-xl px-5 py-2 rounded-full flex items-center gap-5 shadow-[0_10px_35px_rgba(0,0,0,0.7)]">
+      <div
+        className={`md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-40 border px-4 py-2 flex items-center gap-4 shadow-[0_10px_35px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors duration-300 ${
+          isLight
+            ? "bg-[#FFF5D6]/95 border-[#4C9DB0]/40 text-[#011936]"
+            : "bg-[#001126]/95 border-[#ED254E]/30 text-slate-100"
+        }`}
+      >
         <button
           type="button"
           onClick={() => {
             setMessages([]);
             setViewerPage(null);
           }}
-          className="btn-tactile w-9 h-9 rounded-full bg-gradient-to-b from-white via-slate-100 to-slate-300 text-slate-900 flex items-center justify-center shadow-[0_2px_10px_rgba(255,255,255,0.35)] border border-white/80"
+          className={`btn-tactile w-8 h-8 border flex items-center justify-center ${
+            isLight
+              ? "bg-[#4C9DB0] text-white border-[#4C9DB0]"
+              : "bg-[#ED254E] text-white border-[#ED254E]"
+          }`}
+          title="Home"
         >
           <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
@@ -699,10 +900,14 @@ export const App: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowDocumentsModal(true)}
-          className="btn-tactile p-2 rounded-full text-slate-400 hover:text-white"
+          className={`btn-tactile p-2 border ${
+            isLight
+              ? "border-[#4C9DB0]/20 text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
+              : "border-white/10 text-slate-300 hover:text-white hover:border-[#ED254E]"
+          }`}
           title="PDF Documents"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </button>
@@ -710,10 +915,14 @@ export const App: React.FC = () => {
         <button
           type="button"
           onClick={handleCreateConversation}
-          className="btn-tactile p-2 rounded-full text-slate-400 hover:text-white"
+          className={`btn-tactile p-2 border ${
+            isLight
+              ? "border-[#4C9DB0]/20 text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
+              : "border-white/10 text-slate-300 hover:text-white hover:border-[#ED254E]"
+          }`}
           title="New Chat"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
           </svg>
         </button>
@@ -721,23 +930,38 @@ export const App: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowHistoryModal(true)}
-          className="btn-tactile p-2 rounded-full text-slate-400 hover:text-white"
+          className={`btn-tactile p-2 border ${
+            isLight
+              ? "border-[#4C9DB0]/20 text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
+              : "border-white/10 text-slate-300 hover:text-white hover:border-[#ED254E]"
+          }`}
           title="Chat History"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </button>
 
         <button
           type="button"
-          onClick={() => setShowToolsModal(true)}
-          className="btn-tactile p-2 rounded-full text-slate-400 hover:text-white"
-          title="Tools & Settings"
+          onClick={toggleTheme}
+          className={`btn-tactile p-2 border ${
+            isLight
+              ? "border-[#4C9DB0] bg-[#4C9DB0] text-white"
+              : "border-[#ED254E] bg-[#ED254E]/20 text-[#ED254E]"
+          }`}
+          title={isLight ? "Dark Mode" : "Light Mode"}
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          </svg>
+          {isLight ? (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="5" />
+              <path strokeLinecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4 fill-none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          )}
         </button>
       </div>
 
@@ -746,20 +970,42 @@ export const App: React.FC = () => {
       {/* ==================================================================== */}
       {showDocumentsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fade-in-down">
-          <div className="w-full max-w-lg rounded-3xl bg-[#0d131f] border border-white/10 p-6 shadow-2xl space-y-5 animate-scale-up">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+          <div
+            className={`w-full max-w-lg border p-6 shadow-2xl space-y-5 animate-scale-up ${
+              isLight
+                ? "bg-[#FFFDF7] border-[#4C9DB0] text-[#011936]"
+                : "bg-[#011936] border-[#ED254E]/40 text-slate-100"
+            }`}
+          >
+            <div
+              className={`flex items-center justify-between pb-3 border-b ${
+                isLight ? "border-[#4C9DB0]/20" : "border-white/10"
+              }`}
+            >
               <div>
-                <h3 className="text-base font-bold text-white">
+                <h3
+                  className={`text-base font-bold ${
+                    isLight ? "text-[#011936]" : "text-white"
+                  }`}
+                >
                   Document Library
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p
+                  className={`text-xs ${
+                    isLight ? "text-[#395d6a]" : "text-slate-400"
+                  }`}
+                >
                   Select a document to ask questions or upload new PDFs
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowDocumentsModal(false)}
-                className="btn-tactile p-1.5 rounded-lg text-slate-400 hover:text-white"
+                className={`btn-tactile p-1.5 ${
+                  isLight
+                    ? "text-[#011936] hover:text-[#4C9DB0]"
+                    : "text-slate-400 hover:text-[#ED254E]"
+                }`}
               >
                 ✕
               </button>
@@ -773,7 +1019,11 @@ export const App: React.FC = () => {
             />
 
             <div className="space-y-2">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <h4
+                className={`text-xs font-semibold uppercase tracking-wider ${
+                  isLight ? "text-[#4C9DB0]" : "text-slate-400"
+                }`}
+              >
                 Uploaded PDFs ({documents.length})
               </h4>
               <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
@@ -782,10 +1032,14 @@ export const App: React.FC = () => {
                   return (
                     <div
                       key={doc.id}
-                      className={`flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 ${
+                      className={`flex items-center justify-between p-3 border transition-all duration-200 ${
                         isSelected
-                          ? "bg-white/10 border-white/30 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                          : "bg-[#090d16] border-white/5 text-slate-300 hover:border-white/20"
+                          ? isLight
+                            ? "bg-[#4C9DB0]/15 border-[#4C9DB0] text-[#011936] font-semibold"
+                            : "bg-[#ED254E]/15 border-[#ED254E] text-white font-semibold"
+                          : isLight
+                          ? "bg-[#FFF9E6] border-[#4C9DB0]/20 text-[#011936] hover:border-[#4C9DB0]"
+                          : "bg-[#001126] border-white/5 text-slate-300 hover:border-[#ED254E]/40"
                       }`}
                     >
                       <button
@@ -812,7 +1066,11 @@ export const App: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleDeleteDocument(doc.id)}
-                        className="btn-tactile ml-3 text-slate-500 hover:text-rose-400 p-1.5 rounded-lg transition-colors"
+                        className={`btn-tactile ml-3 p-1.5 transition-colors ${
+                          isLight
+                            ? "text-slate-400 hover:text-rose-600"
+                            : "text-slate-500 hover:text-[#ED254E]"
+                        }`}
                         title="Delete Document"
                       >
                         🗑
@@ -831,13 +1089,33 @@ export const App: React.FC = () => {
       {/* ==================================================================== */}
       {showHistoryModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fade-in-down">
-          <div className="w-full max-w-md rounded-3xl bg-[#0d131f] border border-white/10 p-6 shadow-2xl space-y-4 animate-scale-up">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="text-base font-bold text-white">Chat History</h3>
+          <div
+            className={`w-full max-w-md border p-6 shadow-2xl space-y-4 animate-scale-up ${
+              isLight
+                ? "bg-[#FFFDF7] border-[#4C9DB0] text-[#011936]"
+                : "bg-[#011936] border-[#ED254E]/40 text-slate-100"
+            }`}
+          >
+            <div
+              className={`flex items-center justify-between pb-3 border-b ${
+                isLight ? "border-[#4C9DB0]/20" : "border-white/10"
+              }`}
+            >
+              <h3
+                className={`text-base font-bold ${
+                  isLight ? "text-[#011936]" : "text-white"
+                }`}
+              >
+                Chat History
+              </h3>
               <button
                 type="button"
                 onClick={() => setShowHistoryModal(false)}
-                className="btn-tactile p-1 text-slate-400 hover:text-white"
+                className={`btn-tactile p-1 ${
+                  isLight
+                    ? "text-[#011936] hover:text-[#4C9DB0]"
+                    : "text-slate-400 hover:text-[#ED254E]"
+                }`}
               >
                 ✕
               </button>
@@ -845,7 +1123,11 @@ export const App: React.FC = () => {
 
             <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
               {conversations.length === 0 ? (
-                <p className="text-xs text-slate-400 p-4 text-center">
+                <p
+                  className={`text-xs p-4 text-center ${
+                    isLight ? "text-[#395d6a]" : "text-slate-400"
+                  }`}
+                >
                   No conversation threads for this document yet.
                 </p>
               ) : (
@@ -857,10 +1139,14 @@ export const App: React.FC = () => {
                       setActiveConvId(conv.id);
                       setShowHistoryModal(false);
                     }}
-                    className={`btn-tactile w-full text-left p-3 rounded-2xl border text-xs transition-all ${
+                    className={`btn-tactile w-full text-left p-3 border text-xs transition-all ${
                       conv.id === activeConvId
-                        ? "bg-white/15 border-white/30 text-white font-semibold shadow-lg"
-                        : "bg-[#090d16] border-white/5 text-slate-300 hover:bg-white/5"
+                        ? isLight
+                          ? "bg-[#4C9DB0]/20 border-[#4C9DB0] text-[#011936] font-semibold"
+                          : "bg-[#ED254E]/20 border-[#ED254E] text-white font-semibold"
+                        : isLight
+                        ? "bg-[#FFF9E6] border-[#4C9DB0]/20 text-[#011936] hover:border-[#4C9DB0]"
+                        : "bg-[#001126] border-white/5 text-slate-300 hover:border-[#ED254E]/30"
                     }`}
                   >
                     <div className="truncate">{conv.title}</div>
@@ -880,53 +1166,117 @@ export const App: React.FC = () => {
       {/* ==================================================================== */}
       {showToolsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fade-in-down">
-          <div className="w-full max-w-md rounded-3xl bg-[#0d131f] border border-white/10 p-6 shadow-2xl space-y-4 animate-scale-up">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="text-base font-bold text-white">
+          <div
+            className={`w-full max-w-md border p-6 shadow-2xl space-y-4 animate-scale-up ${
+              isLight
+                ? "bg-[#FFFDF7] border-[#4C9DB0] text-[#011936]"
+                : "bg-[#011936] border-[#ED254E]/40 text-slate-100"
+            }`}
+          >
+            <div
+              className={`flex items-center justify-between pb-3 border-b ${
+                isLight ? "border-[#4C9DB0]/20" : "border-white/10"
+              }`}
+            >
+              <h3
+                className={`text-base font-bold ${
+                  isLight ? "text-[#011936]" : "text-white"
+                }`}
+              >
                 RAG Engine Settings
               </h3>
               <button
                 type="button"
                 onClick={() => setShowToolsModal(false)}
-                className="btn-tactile p-1 text-slate-400 hover:text-white"
+                className={`btn-tactile p-1 ${
+                  isLight
+                    ? "text-[#011936] hover:text-[#4C9DB0]"
+                    : "text-slate-400 hover:text-[#ED254E]"
+                }`}
               >
                 ✕
               </button>
             </div>
 
-            <div className="space-y-3 text-xs text-slate-300">
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#090d16] border border-white/10">
+            <div
+              className={`space-y-3 text-xs ${
+                isLight ? "text-[#011936]" : "text-slate-300"
+              }`}
+            >
+              <div
+                className={`flex items-center justify-between p-3 border ${
+                  isLight
+                    ? "bg-[#FFF9E6] border-[#4C9DB0]/30"
+                    : "bg-[#001126] border-white/10"
+                }`}
+              >
                 <div>
-                  <div className="font-semibold text-white">Citation Strictness</div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="font-semibold">Citation Strictness</div>
+                  <div
+                    className={`text-[11px] ${
+                      isLight ? "text-[#395d6a]" : "text-slate-500"
+                    }`}
+                  >
                     Verify against stored chunk metadata
                   </div>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
+                <span
+                  className={`px-2.5 py-1 border font-bold ${
+                    isLight
+                      ? "bg-[#4C9DB0]/15 border-[#4C9DB0] text-[#4C9DB0]"
+                      : "bg-[#ED254E]/15 border-[#ED254E] text-[#ED254E]"
+                  }`}
+                >
                   Active
                 </span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#090d16] border border-white/10">
+              <div
+                className={`flex items-center justify-between p-3 border ${
+                  isLight
+                    ? "bg-[#FFF9E6] border-[#4C9DB0]/30"
+                    : "bg-[#001126] border-white/10"
+                }`}
+              >
                 <div>
-                  <div className="font-semibold text-white">Offline Fallback</div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="font-semibold">Offline Fallback</div>
+                  <div
+                    className={`text-[11px] ${
+                      isLight ? "text-[#395d6a]" : "text-slate-500"
+                    }`}
+                  >
                     Deterministic local n-gram vectors
                   </div>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-white/10 border border-white/20 text-slate-200 font-bold">
+                <span
+                  className={`px-2.5 py-1 border font-bold ${
+                    isLight
+                      ? "bg-[#4C9DB0]/10 border-[#4C9DB0]/40 text-[#4C9DB0]"
+                      : "bg-white/10 border-white/20 text-slate-200"
+                  }`}
+                >
                   Auto
                 </span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#090d16] border border-white/10">
+              <div
+                className={`flex items-center justify-between p-3 border ${
+                  isLight
+                    ? "bg-[#FFF9E6] border-[#4C9DB0]/30"
+                    : "bg-[#001126] border-white/10"
+                }`}
+              >
                 <div>
-                  <div className="font-semibold text-white">Chunking Window</div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="font-semibold">Chunking Window</div>
+                  <div
+                    className={`text-[11px] ${
+                      isLight ? "text-[#395d6a]" : "text-slate-500"
+                    }`}
+                  >
                     800 chars / 150 overlap (Sentence-snapped)
                   </div>
                 </div>
-                <span className="text-slate-400 font-mono">800/150</span>
+                <span className="font-mono">800/150</span>
               </div>
             </div>
           </div>
