@@ -994,17 +994,17 @@ export const App: React.FC = () => {
                 type="button"
                 onClick={() =>
                   handleSendQuestion(
-                    "Surprise me! Give me key takeaways and unique insights from this document."
+                    "Surprise me! Give me creative ideas, unusual connections, and key insights from this document."
                   )
                 }
                 className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
               >
                 <div className="flex items-center gap-2 mb-2 font-semibold text-white">
-                  <span>💬</span>
+                  <span className="text-cyan-400">💬</span>
                   <span>Surprise me!</span>
                 </div>
                 <p className="text-xs text-slate-400">
-                  Surprise me with a creative idea or key insights.
+                  Surprise me with a creative idea or story.
                 </p>
               </button>
 
@@ -1012,17 +1012,17 @@ export const App: React.FC = () => {
                 type="button"
                 onClick={() =>
                   handleSendQuestion(
-                    "What are the most critical sections and exact page citations in this document?"
+                    "Create an image prompt and visual description representing the core concepts of this document."
                   )
                 }
                 className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
               >
                 <div className="flex items-center gap-2 mb-2 font-semibold text-white">
-                  <span>👤</span>
-                  <span>Inspect citations</span>
+                  <span className="text-cyan-400">👤</span>
+                  <span>Create image</span>
                 </div>
                 <p className="text-xs text-slate-400">
-                  Verify source evidence with grounded page numbers.
+                  Create an image from your idea or prompt.
                 </p>
               </button>
 
@@ -1036,7 +1036,7 @@ export const App: React.FC = () => {
                 className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
               >
                 <div className="flex items-center gap-2 mb-2 font-semibold text-white">
-                  <span>📑</span>
+                  <span className="text-cyan-400">📄</span>
                   <span>Summarise</span>
                 </div>
                 <p className="text-xs text-slate-400">

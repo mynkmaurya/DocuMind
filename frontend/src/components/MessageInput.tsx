@@ -11,7 +11,7 @@ interface MessageInputProps {
 
 export const MessageInput: React.FC<MessageInputProps> = ({
   disabled,
-  placeholder = "Ask me anything…",
+  placeholder = "Ask me anything ...",
   activeDocumentName,
   onSendQuestion,
   onOpenUploadModal,
@@ -43,43 +43,38 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
   return (
     <div className="w-full max-w-2xl mx-auto transition-transform duration-300">
-      {/* Outer container card with glowing border highlight */}
+      {/* Outer container card with glowing border highlight matching the design */}
       <div
-        className={`relative rounded-2xl sm:rounded-3xl p-1 bg-gradient-to-b from-[#1b2537]/80 to-[#101622]/90 border transition-all duration-300 backdrop-blur-xl ${
+        className={`relative rounded-3xl p-1 bg-gradient-to-b from-[#0e1d28]/95 via-[#0b1720]/95 to-[#070e15]/98 border transition-all duration-300 backdrop-blur-2xl ${
           isFocused
-            ? "border-sky-500/60 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(56,189,248,0.25)] scale-[1.008]"
-            : "border-slate-700/50 shadow-[0_20px_50px_rgba(0,0,0,0.65)]"
+            ? "border-cyan-500/40 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(56,189,248,0.2)] scale-[1.006]"
+            : "border-teal-500/20 shadow-[0_20px_50px_rgba(0,0,0,0.7)]"
         }`}
       >
-        {/* Top subtle Pro / Grounded banner */}
-        <div className="flex items-center justify-between px-3.5 sm:px-4 pt-2.5 pb-2 text-[11px] sm:text-xs font-medium text-slate-300">
-          <div className="flex items-center gap-1.5 text-sky-400">
-            <svg
-              className="w-3.5 h-3.5 animate-pulse text-sky-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                clipRule="evenodd"
-              />
-            </svg>
+        {/* Top banner: Unlock more features with Pro */}
+        <div className="flex items-center justify-between px-4 pt-2.5 pb-2 text-[11px] sm:text-xs font-medium text-slate-300">
+          <div className="flex items-center gap-1.5 text-slate-200">
+            <span className="text-cyan-400">✦</span>
             <span className="font-semibold text-slate-200">
               {activeDocumentName
                 ? `Grounded on: ${activeDocumentName}`
                 : "Unlock more features with Pro"}
             </span>
           </div>
-          <span className="hidden sm:inline-block text-[11px] text-slate-500 font-mono">
-            DocuMind AI · Page Citations
-          </span>
+          <button
+            type="button"
+            onClick={onOpenToolsModal}
+            className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-cyan-300 transition-colors"
+          >
+            <span>Explore Pro</span>
+            <span>↗</span>
+          </button>
         </div>
 
         {/* Inner dark input area */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-xl sm:rounded-2xl bg-[#090d15]/95 border border-slate-800/80 p-2.5 sm:p-3 transition-colors duration-200"
+          className="rounded-2xl bg-[#060b10] border border-white/5 p-3 sm:p-4 transition-colors duration-200"
         >
           <label htmlFor="documind-question-input" className="sr-only">
             Ask me anything
@@ -94,7 +89,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             onBlur={() => setIsFocused(false)}
             placeholder={
               activeDocumentName
-                ? `Ask anything about ${activeDocumentName} (e.g. key takeaways, summary)…`
+                ? `Ask about ${activeDocumentName} ...`
                 : placeholder
             }
             onChange={handleInput}
@@ -104,20 +99,20 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 handleSubmit(e);
               }
             }}
-            className="w-full resize-none bg-transparent px-2 pt-1 pb-2 text-sm sm:text-base text-slate-100 placeholder:text-slate-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 min-h-[38px] transition-all"
+            className="w-full resize-none bg-transparent px-2 pt-1 pb-2 text-sm sm:text-base text-slate-100 placeholder:text-slate-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 min-h-[40px] transition-all"
           />
 
           {/* Bottom toolbar inside input box */}
-          <div className="flex items-center justify-between pt-2 border-t border-slate-800/60 mt-1">
-            {/* Left buttons: Import file & Tools with tactile spring hover */}
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+          <div className="flex items-center justify-between pt-2 border-t border-white/5 mt-1">
+            {/* Left buttons: Import file & Tools */}
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
                 onClick={onOpenUploadModal}
-                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-slate-700/60 bg-[#141b27] px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium text-slate-300 hover:border-sky-500/40 hover:bg-[#1c2637] hover:text-white focus:outline-none focus:ring-1 focus:ring-sky-500/50"
+                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#101b24]/90 hover:bg-[#162533] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-all focus:outline-none"
               >
                 <svg
-                  className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-400 transition-colors"
+                  className="w-3.5 h-3.5 text-slate-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -135,10 +130,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               <button
                 type="button"
                 onClick={onOpenToolsModal}
-                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-slate-700/60 bg-[#141b27] px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium text-slate-300 hover:border-sky-500/40 hover:bg-[#1c2637] hover:text-white focus:outline-none focus:ring-1 focus:ring-sky-500/50"
+                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#101b24]/90 hover:bg-[#162533] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-all focus:outline-none"
               >
                 <svg
-                  className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-400 transition-colors"
+                  className="w-3.5 h-3.5 text-slate-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -154,22 +149,31 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               </button>
             </div>
 
-            {/* Right button: Electric Cyan Up Arrow */}
-            <div className="flex items-center gap-2">
+            {/* Right buttons: Sparkle Model dropdown & Vivid Cyan Send Button */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={onOpenToolsModal}
+                title="AI Model Selector"
+                className="flex items-center gap-1 text-slate-400 hover:text-white text-xs transition-colors p-1"
+              >
+                <span className="text-sm">✦</span>
+                <span className="text-[10px]">▾</span>
+              </button>
+
+              {/* Vivid Cyan Circular Send Button matching the design */}
               <button
                 type="submit"
                 disabled={disabled || !hasContent}
                 aria-label="Send question"
-                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0098ea] hover:bg-[#0089d4] active:scale-90 text-white flex items-center justify-center font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 focus:ring-offset-[#090d15] ${
+                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-[#0284c7] via-[#0ea5e9] to-[#38bdf8] hover:from-[#0369a1] hover:to-[#0284c7] active:scale-90 text-white flex items-center justify-center font-black transition-all duration-200 shadow-[0_0_15px_rgba(56,189,248,0.5)] border border-cyan-300/40 ${
                   hasContent && !disabled
-                    ? "shadow-[0_0_20px_rgba(0,152,234,0.65)] scale-105 cursor-pointer"
+                    ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_22px_rgba(56,189,248,0.8)]"
                     : "opacity-40 cursor-not-allowed scale-100"
                 }`}
               >
                 <svg
-                  className={`w-4 h-4 stroke-[2.5] transition-transform duration-200 ${
-                    hasContent ? "-translate-y-0.5" : ""
-                  }`}
+                  className="w-4 h-4 stroke-[3]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
