@@ -27,11 +27,11 @@
 @keyframes orb-float {
   0%, 100% {
     transform: translateY(0px) scale(1);
-    filter: drop-shadow(0 0 25px rgba(237, 37, 78, 0.35)) drop-shadow(0 0 50px rgba(1, 25, 54, 0.4));
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.12)) drop-shadow(0 0 50px rgba(0, 0, 0, 0.9));
   }
   50% {
     transform: translateY(-8px) scale(1.02);
-    filter: drop-shadow(0 0 45px rgba(237, 37, 78, 0.55)) drop-shadow(0 0 75px rgba(251, 191, 36, 0.3));
+    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.22)) drop-shadow(0 0 75px rgba(0, 0, 0, 0.95));
   }
 }
 
@@ -156,10 +156,10 @@
 /* THEME BACKGROUNDS & CARD SURFACES                                            */
 /* ============================================================================ */
 
-/* Dark Mode: Cerritos #011936 + Strawberry Gold #ED254E */
+/* Dark Mode: Pure Matte Black & Crisp White (Zero Blue) */
 .theme-dark-canvas {
-  background: radial-gradient(circle at 50% 20%, rgba(237, 37, 78, 0.14) 0%, rgba(1, 25, 54, 0.95) 50%, #011936 90%),
-              #011936;
+  background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.04) 0%, #0d0d0d 50%, #000000 90%),
+              #000000;
   background-attachment: fixed;
 }
 
@@ -170,20 +170,20 @@
   background-attachment: fixed;
 }
 
-/* Dark Card */
+/* Dark Card: Matte Black & White */
 .card-dark {
-  background: rgba(1, 25, 54, 0.85);
+  background: rgba(18, 18, 18, 0.95);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(237, 37, 78, 0.25);
-  box-shadow: 0 15px 45px -10px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 15px 45px -10px rgba(0, 0, 0, 0.95);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .card-dark:hover {
-  background: rgba(1, 25, 54, 0.98);
-  border-color: #ED254E;
+  background: #1c1c1c;
+  border-color: #FFFFFF;
   transform: translateY(-3px);
-  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85), 0 0 20px 0 rgba(237, 37, 78, 0.3);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.98), 0 0 20px 0 rgba(255, 255, 255, 0.18);
 }
 
 /* Light Card */

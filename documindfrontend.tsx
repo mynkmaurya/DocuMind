@@ -482,19 +482,19 @@ export const IridescentOrb: React.FC<{
         style={{
           background: isLight
             ? "radial-gradient(circle, rgba(76, 157, 176, 0.5) 0%, rgba(255, 235, 175, 0.4) 45%, rgba(76, 157, 176, 0.15) 75%, transparent 85%)"
-            : "radial-gradient(circle, rgba(237, 37, 78, 0.45) 0%, rgba(1, 25, 54, 0.6) 45%, rgba(237, 37, 78, 0.2) 75%, transparent 85%)",
+            : "radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(180, 180, 180, 0.12) 40%, rgba(255, 255, 255, 0.03) 75%, transparent 85%)",
         }}
       />
       <div
         className={`orb-element relative w-full h-full rounded-full p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.95)] ${
           isLight
             ? "bg-gradient-to-b from-[#4C9DB0]/60 via-[#FFEBAF]/50 to-[#4C9DB0]/30"
-            : "bg-gradient-to-b from-[#ED254E]/50 via-[#011936] to-[#ED254E]/20"
+            : "bg-gradient-to-b from-white/35 via-[#1a1a1a] to-white/10"
         }`}
       >
         <div
           className={`orb-element relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_-16px_32px_rgba(0,0,0,0.95),inset_0_4px_14px_rgba(255,255,255,0.45)] animate-orb-float border ${
-            isLight ? "border-[#4C9DB0]/40" : "border-[#ED254E]/40"
+            isLight ? "border-[#4C9DB0]/40" : "border-white/30"
           }`}
         >
           <div
@@ -502,7 +502,7 @@ export const IridescentOrb: React.FC<{
             style={{
               background: isLight
                 ? "radial-gradient(circle at 45% 35%, #4C9DB0 0%, #1d4650 60%, #0c2025 100%)"
-                : "radial-gradient(circle at 45% 35%, #011936 0%, #000c1c 60%, #00050c 100%)",
+                : "radial-gradient(circle at 45% 35%, #222222 0%, #111111 60%, #000000 100%)",
             }}
           />
           <div
@@ -510,7 +510,7 @@ export const IridescentOrb: React.FC<{
             style={{
               background: isLight
                 ? "conic-gradient(from 180deg at 50% 50%, #FFEBAF 0deg, #4C9DB0 60deg, #0284c7 120deg, #FFEBAF 180deg, #38bdf8 260deg, #0f766e 320deg, #FFEBAF 360deg)"
-                : "conic-gradient(from 180deg at 50% 50%, #ED254E 0deg, #fbbf24 60deg, #011936 120deg, #ED254E 180deg, #f43f5e 260deg, #022045 320deg, #ED254E 360deg)",
+                : "conic-gradient(from 180deg at 50% 50%, #ffffff 0deg, #a1a1aa 60deg, #181818 120deg, #f4f4f5 180deg, #52525b 260deg, #09090b 320deg, #ffffff 360deg)",
             }}
           />
           <div
@@ -518,7 +518,7 @@ export const IridescentOrb: React.FC<{
             style={{
               background: isLight
                 ? "conic-gradient(from 45deg at 50% 50%, #ffffff 0deg, #4C9DB0 90deg, #FFEBAF 180deg, #0284c7 270deg, #ffffff 360deg)"
-                : "conic-gradient(from 45deg at 50% 50%, #ffffff 0deg, #ED254E 90deg, #011936 180deg, #fbbf24 270deg, #ffffff 360deg)",
+                : "conic-gradient(from 45deg at 50% 50%, #ffffff 0deg, #3f3f46 90deg, #e4e4e7 180deg, #181818 270deg, #ffffff 360deg)",
             }}
           />
           <div
@@ -526,7 +526,7 @@ export const IridescentOrb: React.FC<{
             style={{
               background: isLight
                 ? "radial-gradient(circle at 40% 40%, rgba(255, 235, 175, 0.95) 0%, rgba(76, 157, 176, 0.75) 40%, transparent 100%)"
-                : "radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.95) 0%, rgba(237, 37, 78, 0.8) 40%, rgba(1, 25, 54, 0.3) 80%, transparent 100%)",
+                : "radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.95) 0%, rgba(212, 212, 216, 0.6) 40%, rgba(0, 0, 0, 0.6) 80%, transparent 100%)",
             }}
           />
           <div
@@ -768,7 +768,7 @@ export const App: React.FC = () => {
   const [viewerPage, setViewerPage] = useState<number | null>(null);
   const [viewerCitation, setViewerCitation] = useState<Citation | null>(null);
 
-  // Theme State ("dark" = Cerritos #011936 & Strawberry Gold #ED254E, "light" = Moonstone #4C9DB0 & Vanilla #FFEBAF)
+  // Theme State ("dark" = Matte Black & White (No Blue), "light" = Moonstone #4C9DB0 & Vanilla #FFEBAF)
   const [theme, setTheme] = useState<"dark" | "light">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("documind-theme");
@@ -942,7 +942,7 @@ export const App: React.FC = () => {
       className={`min-h-screen w-full flex flex-col md:flex-row overflow-x-hidden transition-colors duration-300 ${
         isLight
           ? "theme-light-canvas text-[#011936]"
-          : "theme-dark-canvas text-slate-100"
+          : "theme-dark-canvas text-white"
       }`}
     >
       {/* LEFT NAVIGATION DOCK */}
@@ -950,7 +950,7 @@ export const App: React.FC = () => {
         className={`hidden md:flex flex-col justify-between items-center py-6 px-4 w-20 shrink-0 border-r backdrop-blur-xl z-30 transition-colors ${
           isLight
             ? "border-[#4C9DB0]/20 bg-[#FFF5D6]/90"
-            : "border-[#ED254E]/20 bg-[#001126]/90"
+            : "border-white/15 bg-[#0e0e0e]/95"
         }`}
       >
         <div className="flex flex-col items-center gap-6">
@@ -972,7 +972,7 @@ export const App: React.FC = () => {
               className={`w-10 h-10 border flex items-center justify-center transition-all ${
                 isLight
                   ? "bg-[#4C9DB0] hover:bg-[#387c8c] text-white border-[#4C9DB0] shadow-[0_0_15px_rgba(76,157,176,0.5)]"
-                  : "bg-[#ED254E] hover:bg-[#ff3b64] text-white border-[#ED254E] shadow-[0_0_15px_rgba(237,37,78,0.5)]"
+                  : "bg-white hover:bg-zinc-200 text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.4)]"
               }`}
             >
               ⌂
@@ -984,7 +984,7 @@ export const App: React.FC = () => {
               className={`w-10 h-10 border flex items-center justify-center transition-all ${
                 isLight
                   ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
-                  : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+                  : "border-white/15 bg-[#141414] text-zinc-300 hover:border-white hover:bg-white hover:text-black"
               }`}
             >
               📄
@@ -996,7 +996,7 @@ export const App: React.FC = () => {
               className={`w-10 h-10 border flex items-center justify-center transition-all ${
                 isLight
                   ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
-                  : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+                  : "border-white/15 bg-[#141414] text-zinc-300 hover:border-white hover:bg-white hover:text-black"
               }`}
             >
               🕒
@@ -1008,7 +1008,7 @@ export const App: React.FC = () => {
               className={`w-10 h-10 border flex items-center justify-center transition-all ${
                 isLight
                   ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
-                  : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+                  : "border-white/15 bg-[#141414] text-zinc-300 hover:border-white hover:bg-white hover:text-black"
               }`}
             >
               +
@@ -1023,7 +1023,7 @@ export const App: React.FC = () => {
             className={`w-9 h-9 border flex items-center justify-center transition-colors ${
               isLight
                 ? "border-[#4C9DB0]/30 text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
-                : "border-[#ED254E]/20 text-slate-400 hover:border-[#ED254E] hover:text-white"
+                : "border-white/15 bg-[#141414] text-zinc-300 hover:border-white hover:bg-white hover:text-black"
             }`}
           >
             ⚙
@@ -1033,13 +1033,13 @@ export const App: React.FC = () => {
             onClick={toggleTheme}
             title={
               isLight
-                ? "Switch to Dark Mode (Cerritos & Strawberry Gold)"
+                ? "Switch to Dark Mode (Matte Black & White)"
                 : "Switch to Light Mode (Moonstone & Vanilla)"
             }
             className={`w-9 h-9 border flex items-center justify-center transition-all ${
               isLight
                 ? "border-[#4C9DB0] bg-[#4C9DB0] text-white shadow-[0_0_12px_rgba(76,157,176,0.6)]"
-                : "border-[#ED254E] bg-[#ED254E]/20 text-[#ED254E] hover:bg-[#ED254E] hover:text-white shadow-[0_0_12px_rgba(237,37,78,0.4)]"
+                : "border-white/30 bg-white/10 text-white hover:bg-white hover:text-black shadow-[0_0_12px_rgba(255,255,255,0.2)]"
             }`}
           >
             {isLight ? "☀️" : "🌙"}
@@ -1048,7 +1048,7 @@ export const App: React.FC = () => {
             className={`w-9 h-9 border flex items-center justify-center font-bold text-xs ${
               isLight
                 ? "border-[#4C9DB0] bg-[#FFF8E6] text-[#4C9DB0]"
-                : "border-[#ED254E] bg-[#001126] text-[#ED254E]"
+                : "border-white/30 bg-[#161616] text-white hover:border-white"
             }`}
           >
             H
@@ -1057,12 +1057,12 @@ export const App: React.FC = () => {
       </nav>
 
       {/* MOBILE TOP BAR */}
-      <header className="md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-[#090d16]/90 backdrop-blur-lg sticky top-0 z-40">
+      <header className="md:hidden flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur-lg sticky top-0 z-40">
         <div className="flex items-center gap-2">
           <span className="font-extrabold text-base tracking-wider text-white">
             LIX
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400">
+          <span className="text-xs px-2 py-0.5 border border-white/20 bg-white/10 text-white">
             DocuMind
           </span>
         </div>

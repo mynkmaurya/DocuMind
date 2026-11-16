@@ -5,6 +5,7 @@ interface ConversationHistoryProps {
   conversations: Conversation[];
   activeConversationId: string | null;
   disabled?: boolean;
+  theme?: "dark" | "light";
   onSelectConversation: (conversationId: string) => void;
   onCreateConversation: () => void;
 }
@@ -13,27 +14,44 @@ export const ConversationHistory: React.FC<ConversationHistoryProps> = ({
   conversations,
   activeConversationId,
   disabled = false,
+  theme = "dark",
   onSelectConversation,
   onCreateConversation,
 }) => {
+  const isLight = theme === "light";
+
   return (
     <section aria-label="Conversation history" className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <h2 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <h2
+          className={`text-[11px] font-semibold uppercase tracking-wider ${
+            isLight ? "text-[#4C9DB0]" : "text-zinc-400"
+          }`}
+        >
           Chat Sessions
         </h2>
         <button
           type="button"
           disabled={disabled}
           onClick={onCreateConversation}
-          className="rounded-lg bg-sky-500/10 border border-sky-500/20 px-2.5 py-1 text-xs font-semibold text-sky-400 hover:bg-sky-500/20 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-400 disabled:opacity-40 transition-colors"
+          className={`btn-tactile border px-2.5 py-1 text-xs font-semibold disabled:opacity-40 transition-colors ${
+            isLight
+              ? "border-[#4C9DB0]/30 bg-[#4C9DB0]/15 text-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
+              : "border-white/20 bg-white/10 text-white hover:bg-white hover:text-black"
+          }`}
         >
           + New Chat
         </button>
       </div>
 
       {conversations.length === 0 ? (
-        <p className="rounded-xl border border-slate-800 bg-[#0c111a] p-3 text-xs text-slate-500">
+        <p
+          className={`border p-3 text-xs ${
+            isLight
+              ? "border-[#4C9DB0]/20 bg-[#FFF9E6] text-[#395d6a]"
+              : "border-white/10 bg-[#141414] text-zinc-400"
+          }`}
+        >
           No chat history yet. Ask a question to begin a thread.
         </p>
       ) : (
@@ -45,16 +63,26 @@ export const ConversationHistory: React.FC<ConversationHistoryProps> = ({
                 <button
                   type="button"
                   onClick={() => onSelectConversation(conv.id)}
-                  className={`w-full rounded-xl px-3 py-2 text-left text-xs transition-all ${
+                  className={`w-full px-3 py-2 text-left text-xs transition-all border ${
                     isSelected
-                      ? "bg-sky-500 text-white font-semibold shadow-[0_0_15px_rgba(14,165,233,0.35)]"
-                      : "bg-[#0d121c] border border-slate-800/80 text-slate-300 hover:bg-[#131a28] hover:border-slate-700"
+                      ? isLight
+                        ? "bg-[#4C9DB0] text-white font-semibold shadow-md border-[#4C9DB0]"
+                        : "bg-white text-black font-semibold shadow-md border-white"
+                      : isLight
+                      ? "bg-[#FFFDF7] border-[#4C9DB0]/20 text-[#011936] hover:border-[#4C9DB0]"
+                      : "bg-[#141414] border-white/10 text-zinc-300 hover:border-white/40"
                   }`}
                 >
                   <div className="truncate">{conv.title}</div>
                   <div
                     className={`mt-0.5 text-[10px] ${
-                      isSelected ? "text-sky-100" : "text-slate-500"
+                      isSelected
+                        ? isLight
+                          ? "text-white/80"
+                          : "text-black/80"
+                        : isLight
+                        ? "text-[#395d6a]"
+                        : "text-zinc-500"
                     }`}
                   >
                     {new Date(conv.created_date).toLocaleTimeString([], {

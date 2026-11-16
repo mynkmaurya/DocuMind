@@ -39,22 +39,22 @@ export const IridescentOrb: React.FC<IridescentOrbProps> = ({
         style={{
           background: isLight
             ? "radial-gradient(circle, rgba(76, 157, 176, 0.5) 0%, rgba(255, 235, 175, 0.4) 45%, rgba(76, 157, 176, 0.15) 75%, transparent 85%)"
-            : "radial-gradient(circle, rgba(237, 37, 78, 0.45) 0%, rgba(1, 25, 54, 0.6) 45%, rgba(237, 37, 78, 0.2) 75%, transparent 85%)",
+            : "radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(180, 180, 180, 0.12) 40%, rgba(255, 255, 255, 0.03) 75%, transparent 85%)",
         }}
       />
 
       {/* Outer metallic bezel ring */}
       <div
-        className={`orb-element relative w-full h-full rounded-full p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.9)] transition-colors duration-500 ${
+        className={`orb-element relative w-full h-full rounded-full p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.95)] transition-colors duration-500 ${
           isLight
             ? "bg-gradient-to-b from-[#4C9DB0]/60 via-[#FFEBAF]/50 to-[#4C9DB0]/30"
-            : "bg-gradient-to-b from-[#ED254E]/50 via-[#011936] to-[#ED254E]/20"
+            : "bg-gradient-to-b from-white/35 via-[#1a1a1a] to-white/10"
         }`}
       >
         {/* Main 3D spherical body with swirling fluid ribbons */}
         <div
-          className={`orb-element relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_-16px_32px_rgba(0,0,0,0.92),inset_0_4px_14px_rgba(255,255,255,0.4)] animate-orb-float border ${
-            isLight ? "border-[#4C9DB0]/40" : "border-[#ED254E]/40"
+          className={`orb-element relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_-16px_32px_rgba(0,0,0,0.95),inset_0_4px_14px_rgba(255,255,255,0.4)] animate-orb-float border ${
+            isLight ? "border-[#4C9DB0]/40" : "border-white/30"
           }`}
         >
           {/* Deep core background */}
@@ -63,17 +63,17 @@ export const IridescentOrb: React.FC<IridescentOrbProps> = ({
             style={{
               background: isLight
                 ? "radial-gradient(circle at 45% 35%, #4C9DB0 0%, #1d4650 60%, #0c2025 100%)"
-                : "radial-gradient(circle at 45% 35%, #011936 0%, #000c1c 60%, #00050c 100%)",
+                : "radial-gradient(circle at 45% 35%, #222222 0%, #111111 60%, #000000 100%)",
             }}
           />
 
-          {/* Layer 1: Swirling primary ribbon */}
+          {/* Layer 1: Swirling primary ribbon (Liquid Chrome / Mercury Swirl in Dark Mode) */}
           <div
             className="orb-element absolute -inset-1/2 rounded-full opacity-85 mix-blend-screen filter blur-md animate-orb-swirl"
             style={{
               background: isLight
                 ? "conic-gradient(from 180deg at 50% 50%, #FFEBAF 0deg, #4C9DB0 60deg, #0284c7 120deg, #FFEBAF 180deg, #38bdf8 260deg, #0f766e 320deg, #FFEBAF 360deg)"
-                : "conic-gradient(from 180deg at 50% 50%, #ED254E 0deg, #fbbf24 60deg, #011936 120deg, #ED254E 180deg, #f43f5e 260deg, #022045 320deg, #ED254E 360deg)",
+                : "conic-gradient(from 180deg at 50% 50%, #ffffff 0deg, #a1a1aa 60deg, #181818 120deg, #f4f4f5 180deg, #52525b 260deg, #09090b 320deg, #ffffff 360deg)",
             }}
           />
 
@@ -83,7 +83,7 @@ export const IridescentOrb: React.FC<IridescentOrbProps> = ({
             style={{
               background: isLight
                 ? "conic-gradient(from 45deg at 50% 50%, #ffffff 0deg, #4C9DB0 90deg, #FFEBAF 180deg, #0284c7 270deg, #ffffff 360deg)"
-                : "conic-gradient(from 45deg at 50% 50%, #ffffff 0deg, #ED254E 90deg, #011936 180deg, #fbbf24 270deg, #ffffff 360deg)",
+                : "conic-gradient(from 45deg at 50% 50%, #ffffff 0deg, #3f3f46 90deg, #e4e4e7 180deg, #181818 270deg, #ffffff 360deg)",
             }}
           />
 
@@ -93,7 +93,7 @@ export const IridescentOrb: React.FC<IridescentOrbProps> = ({
             style={{
               background: isLight
                 ? "radial-gradient(circle at 40% 40%, rgba(255, 235, 175, 0.95) 0%, rgba(76, 157, 176, 0.75) 40%, transparent 100%)"
-                : "radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.95) 0%, rgba(237, 37, 78, 0.8) 40%, rgba(1, 25, 54, 0.3) 80%, transparent 100%)",
+                : "radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.95) 0%, rgba(212, 212, 216, 0.6) 40%, rgba(0, 0, 0, 0.6) 80%, transparent 100%)",
             }}
           />
 
@@ -102,7 +102,7 @@ export const IridescentOrb: React.FC<IridescentOrbProps> = ({
             className="orb-element absolute inset-0 rounded-full pointer-events-none"
             style={{
               boxShadow:
-                "inset 0 0 45px rgba(0, 0, 0, 0.9), inset 0 -18px 30px rgba(0, 0, 0, 0.95), inset 0 2px 10px rgba(255, 255, 255, 0.55)",
+                "inset 0 0 45px rgba(0, 0, 0, 0.95), inset 0 -18px 30px rgba(0, 0, 0, 0.98), inset 0 2px 10px rgba(255, 255, 255, 0.55)",
             }}
           />
 
@@ -115,7 +115,7 @@ export const IridescentOrb: React.FC<IridescentOrbProps> = ({
             style={{
               background: isLight
                 ? "linear-gradient(to top, rgba(76, 157, 176, 0.5), transparent)"
-                : "linear-gradient(to top, rgba(237, 37, 78, 0.5), transparent)",
+                : "linear-gradient(to top, rgba(255, 255, 255, 0.35), transparent)",
             }}
           />
         </div>

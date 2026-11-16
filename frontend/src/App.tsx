@@ -38,7 +38,7 @@ export const App: React.FC = () => {
   const [viewerPage, setViewerPage] = useState<number | null>(null);
   const [viewerCitation, setViewerCitation] = useState<Citation | null>(null);
 
-  // Theme State ("dark" = Cerritos #011936 & Strawberry Gold #ED254E, "light" = Moonstone #4C9DB0 & Vanilla #FFEBAF)
+  // Theme State ("dark" = Matte Black & White (No Blue), "light" = Moonstone #4C9DB0 & Vanilla #FFEBAF)
   const [theme, setTheme] = useState<"dark" | "light">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("documind-theme");
@@ -302,7 +302,7 @@ export const App: React.FC = () => {
       className={`min-h-screen w-full flex items-center justify-center p-0 md:p-4 lg:p-6 overflow-x-hidden transition-colors duration-300 ${
         isLight
           ? "theme-light-canvas text-[#011936] selection:bg-[#4C9DB0] selection:text-white"
-          : "theme-dark-canvas text-slate-100 selection:bg-[#ED254E] selection:text-white"
+          : "theme-dark-canvas text-white selection:bg-white selection:text-black"
       }`}
     >
       {/* Outer App Frame (Straight brutalist geometry matching request) */}
@@ -310,7 +310,7 @@ export const App: React.FC = () => {
         className={`w-full h-full min-h-screen md:min-h-[92vh] max-w-[1440px] border flex flex-col md:flex-row overflow-hidden relative backdrop-blur-2xl transition-colors duration-300 ${
           isLight
             ? "bg-[#FFEBAF]/90 border-[#4C9DB0]/40 shadow-[0_30px_90px_rgba(76,157,176,0.2)]"
-            : "bg-[#011936]/90 border-[#ED254E]/25 shadow-[0_30px_90px_rgba(0,0,0,0.85)]"
+            : "bg-[#0c0c0c]/95 border-white/15 shadow-[0_30px_90px_rgba(0,0,0,0.95)]"
         }`}
       >
         {/* ==================================================================== */}
@@ -321,7 +321,7 @@ export const App: React.FC = () => {
           className={`hidden md:flex flex-col justify-between items-center py-7 px-3.5 w-[76px] shrink-0 border-r backdrop-blur-2xl z-30 transition-colors duration-300 ${
             isLight
               ? "bg-[#FFF5D6]/90 border-[#4C9DB0]/20"
-              : "bg-[#001126]/90 border-[#ED254E]/20"
+              : "bg-[#0e0e0e]/95 border-white/15"
           }`}
         >
           {/* Top Brand Logo & Navigation Controls */}
@@ -335,7 +335,7 @@ export const App: React.FC = () => {
               className={`font-extrabold text-base tracking-widest select-none cursor-pointer pt-1 transition-colors ${
                 isLight
                   ? "text-[#011936] hover:text-[#4C9DB0]"
-                  : "text-white hover:text-[#ED254E]"
+                  : "text-white hover:text-zinc-300"
               }`}
             >
               LIX
@@ -353,7 +353,7 @@ export const App: React.FC = () => {
                 className={`btn-tactile w-10 h-10 border flex items-center justify-center transition-all ${
                   isLight
                     ? "bg-[#4C9DB0] hover:bg-[#387c8c] text-white border-[#4C9DB0] shadow-[0_0_15px_rgba(76,157,176,0.5)]"
-                    : "bg-[#ED254E] hover:bg-[#ff3b64] text-white border-[#ED254E] shadow-[0_0_15px_rgba(237,37,78,0.5)]"
+                    : "bg-white hover:bg-zinc-200 text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.4)]"
                 }`}
               >
                 <svg
@@ -373,10 +373,10 @@ export const App: React.FC = () => {
                   showDocumentsModal
                     ? isLight
                       ? "border-[#4C9DB0] bg-[#4C9DB0] text-white"
-                      : "border-[#ED254E] bg-[#ED254E] text-white"
+                      : "border-white bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.3)]"
                     : isLight
                     ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:border-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
-                    : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+                    : "border-white/15 bg-[#141414] text-zinc-300 hover:border-white hover:bg-white hover:text-black"
                 }`}
               >
                 <svg
@@ -403,10 +403,10 @@ export const App: React.FC = () => {
                   showHistoryModal
                     ? isLight
                       ? "border-[#4C9DB0] bg-[#4C9DB0] text-white"
-                      : "border-[#ED254E] bg-[#ED254E] text-white"
+                      : "border-white bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.3)]"
                     : isLight
                     ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:border-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
-                    : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+                    : "border-white/15 bg-[#141414] text-zinc-300 hover:border-white hover:bg-white hover:text-black"
                 }`}
               >
                 <svg
@@ -432,7 +432,7 @@ export const App: React.FC = () => {
                 className={`btn-tactile w-10 h-10 border flex items-center justify-center transition-all ${
                   isLight
                     ? "border-[#4C9DB0]/30 bg-[#FFFDF5] text-[#011936] hover:border-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
-                    : "border-[#ED254E]/25 bg-[#011936] text-slate-300 hover:border-[#ED254E] hover:text-white"
+                    : "border-white/15 bg-[#141414] text-zinc-300 hover:border-white hover:bg-white hover:text-black"
                 }`}
               >
                 <svg
@@ -462,7 +462,7 @@ export const App: React.FC = () => {
               className={`btn-tactile w-9 h-9 border flex items-center justify-center transition-colors ${
                 isLight
                   ? "border-[#4C9DB0]/30 text-[#011936] hover:border-[#4C9DB0] hover:bg-[#4C9DB0] hover:text-white"
-                  : "border-[#ED254E]/20 text-slate-400 hover:border-[#ED254E] hover:text-white"
+                  : "border-white/15 bg-[#141414] text-zinc-300 hover:border-white hover:bg-white hover:text-black"
               }`}
             >
               <svg
@@ -491,13 +491,13 @@ export const App: React.FC = () => {
               onClick={toggleTheme}
               title={
                 isLight
-                  ? "Switch to Dark Mode (Cerritos #011936 & Strawberry Gold #ED254E)"
-                  : "Switch to Light Mode (Moonstone #4C9DB0 & Vanilla #FFEBAF)"
+                  ? "Switch to Dark Mode (Matte Black & White)"
+                  : "Switch to Light Mode (Moonstone & Vanilla)"
               }
               className={`btn-tactile w-9 h-9 border flex items-center justify-center transition-all ${
                 isLight
                   ? "border-[#4C9DB0] bg-[#4C9DB0] text-white shadow-[0_0_12px_rgba(76,157,176,0.6)]"
-                  : "border-[#ED254E] bg-[#ED254E]/20 text-[#ED254E] hover:bg-[#ED254E] hover:text-white shadow-[0_0_12px_rgba(237,37,78,0.4)]"
+                  : "border-white/30 bg-white/10 text-white hover:bg-white hover:text-black shadow-[0_0_12px_rgba(255,255,255,0.2)]"
               }`}
             >
               {isLight ? (
@@ -535,7 +535,7 @@ export const App: React.FC = () => {
               className={`w-9 h-9 border shadow-md select-none cursor-pointer btn-tactile overflow-hidden flex items-center justify-center font-bold text-xs ${
                 isLight
                   ? "border-[#4C9DB0] bg-[#FFF8E6] text-[#4C9DB0]"
-                  : "border-[#ED254E] bg-[#001126] text-[#ED254E]"
+                  : "border-white/30 bg-[#161616] text-white hover:border-white"
               }`}
             >
               H
@@ -552,7 +552,7 @@ export const App: React.FC = () => {
             className={`w-full flex items-center justify-between px-5 sm:px-8 md:px-10 py-5 text-xs z-20 border-b ${
               isLight
                 ? "border-[#4C9DB0]/20 text-[#011936]"
-                : "border-white/5 text-slate-400"
+                : "border-white/10 text-zinc-400"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -574,7 +574,7 @@ export const App: React.FC = () => {
                 className={`border px-2 py-0.5 text-[10px] font-bold tracking-wider ${
                   isLight
                     ? "border-[#4C9DB0] bg-[#4C9DB0]/15 text-[#4C9DB0]"
-                    : "border-[#ED254E] bg-[#ED254E]/15 text-[#ED254E]"
+                    : "border-white/30 bg-white/10 text-white"
                 }`}
               >
                 BETA
@@ -586,12 +586,12 @@ export const App: React.FC = () => {
               className={`flex items-center gap-1.5 transition-colors cursor-pointer select-none px-3 py-1 border ${
                 isLight
                   ? "border-[#4C9DB0]/30 bg-[#FFFDF7] text-[#011936] hover:border-[#4C9DB0]"
-                  : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+                  : "border-white/15 bg-[#141414] text-zinc-200 hover:text-white hover:border-white"
               }`}
             >
               <span
                 className={`w-1.5 h-1.5 ${
-                  isLight ? "bg-[#4C9DB0]" : "bg-[#ED254E]"
+                  isLight ? "bg-[#4C9DB0]" : "bg-white"
                 }`}
               />
               <span className="font-medium">Personal workspace</span>
@@ -632,7 +632,7 @@ export const App: React.FC = () => {
                 <div className="space-y-1.5 mb-7 animate-fade-in-up stagger-1">
                   <div
                     className={`text-xs sm:text-sm font-medium tracking-wide ${
-                      isLight ? "text-[#4C9DB0] font-semibold" : "text-slate-400"
+                      isLight ? "text-[#4C9DB0] font-semibold" : "text-zinc-400 font-medium"
                     }`}
                   >
                     Hi, Hendricks
@@ -646,7 +646,7 @@ export const App: React.FC = () => {
                   </h1>
                   <p
                     className={`text-xs sm:text-sm max-w-md mx-auto pt-0.5 leading-relaxed ${
-                      isLight ? "text-[#2e4d58]" : "text-slate-400"
+                      isLight ? "text-[#2e4d58]" : "text-zinc-400"
                     }`}
                   >
                     I'm here to help — from quick answers to smart recommendations.
@@ -682,7 +682,7 @@ export const App: React.FC = () => {
                     <div className="flex items-center gap-2 mb-2">
                       <span
                         className={`text-sm ${
-                          isLight ? "text-[#4C9DB0]" : "text-[#ED254E]"
+                          isLight ? "text-[#4C9DB0]" : "text-white"
                         }`}
                       >
                         💬
@@ -691,7 +691,7 @@ export const App: React.FC = () => {
                         className={`text-xs sm:text-sm font-semibold transition-colors ${
                           isLight
                             ? "text-[#011936] group-hover:text-[#4C9DB0]"
-                            : "text-white group-hover:text-[#ED254E]"
+                            : "text-white group-hover:text-zinc-200"
                         }`}
                       >
                         Surprise me!
@@ -699,7 +699,7 @@ export const App: React.FC = () => {
                     </div>
                     <p
                       className={`text-[11px] sm:text-xs leading-relaxed ${
-                        isLight ? "text-[#395d6a]" : "text-slate-400"
+                        isLight ? "text-[#395d6a]" : "text-zinc-400"
                       }`}
                     >
                       Surprise me with a creative idea or key insights.
@@ -721,7 +721,7 @@ export const App: React.FC = () => {
                     <div className="flex items-center gap-2 mb-2">
                       <span
                         className={`text-sm ${
-                          isLight ? "text-[#4C9DB0]" : "text-[#ED254E]"
+                          isLight ? "text-[#4C9DB0]" : "text-white"
                         }`}
                       >
                         👤
@@ -730,7 +730,7 @@ export const App: React.FC = () => {
                         className={`text-xs sm:text-sm font-semibold transition-colors ${
                           isLight
                             ? "text-[#011936] group-hover:text-[#4C9DB0]"
-                            : "text-white group-hover:text-[#ED254E]"
+                            : "text-white group-hover:text-zinc-200"
                         }`}
                       >
                         Inspect citations
@@ -738,7 +738,7 @@ export const App: React.FC = () => {
                     </div>
                     <p
                       className={`text-[11px] sm:text-xs leading-relaxed ${
-                        isLight ? "text-[#395d6a]" : "text-slate-400"
+                        isLight ? "text-[#395d6a]" : "text-zinc-400"
                       }`}
                     >
                       Verify source evidence with grounded page numbers.
@@ -760,7 +760,7 @@ export const App: React.FC = () => {
                     <div className="flex items-center gap-2 mb-2">
                       <span
                         className={`text-sm ${
-                          isLight ? "text-[#4C9DB0]" : "text-[#ED254E]"
+                          isLight ? "text-[#4C9DB0]" : "text-white"
                         }`}
                       >
                         📄
@@ -769,7 +769,7 @@ export const App: React.FC = () => {
                         className={`text-xs sm:text-sm font-semibold transition-colors ${
                           isLight
                             ? "text-[#011936] group-hover:text-[#4C9DB0]"
-                            : "text-white group-hover:text-[#ED254E]"
+                            : "text-white group-hover:text-zinc-200"
                         }`}
                       >
                         Summarise
@@ -777,7 +777,7 @@ export const App: React.FC = () => {
                     </div>
                     <p
                       className={`text-[11px] sm:text-xs leading-relaxed ${
-                        isLight ? "text-[#395d6a]" : "text-slate-400"
+                        isLight ? "text-[#395d6a]" : "text-zinc-400"
                       }`}
                     >
                       Summarise a document or text in seconds.
@@ -788,7 +788,7 @@ export const App: React.FC = () => {
                 {/* Bottom Security / Privacy Footer */}
                 <div
                   className={`mt-8 flex items-center justify-center gap-1.5 text-[11px] font-normal ${
-                    isLight ? "text-[#4C9DB0]" : "text-slate-500"
+                    isLight ? "text-[#4C9DB0]" : "text-zinc-500"
                   }`}
                 >
                   <span>🔒</span>
@@ -804,14 +804,26 @@ export const App: React.FC = () => {
             /* ============================================================== */
             <div className="flex-1 flex flex-col justify-between max-w-3xl w-full mx-auto animate-fade-in-up">
               {/* Header inside chat */}
-              <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+              <div
+                className={`flex items-center justify-between pb-4 border-b mb-4 ${
+                  isLight ? "border-[#4C9DB0]/20" : "border-white/10"
+                }`}
+              >
                 <div className="flex items-center gap-3">
-                  <IridescentOrb size="sm" isStreaming={isStreaming} />
+                  <IridescentOrb size="sm" isStreaming={isStreaming} theme={theme} />
                   <div>
-                    <h2 className="text-base font-bold text-white flex items-center gap-2">
+                    <h2
+                      className={`text-base font-bold flex items-center gap-2 ${
+                        isLight ? "text-[#011936]" : "text-white"
+                      }`}
+                    >
                       <span>DocuMind Grounded Q&A</span>
                     </h2>
-                    <p className="text-xs text-slate-400 truncate max-w-xs sm:max-w-md">
+                    <p
+                      className={`text-xs truncate max-w-xs sm:max-w-md ${
+                        isLight ? "text-[#395d6a]" : "text-zinc-400"
+                      }`}
+                    >
                       {selectedDocument?.filename || "Sample PDF Guide"}
                     </p>
                   </div>
@@ -821,7 +833,11 @@ export const App: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setMessages([])}
-                    className="btn-tactile rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:text-white hover:bg-white/10"
+                    className={`btn-tactile border px-3 py-1.5 text-xs transition-colors ${
+                      isLight
+                        ? "border-[#4C9DB0]/30 bg-[#FFFDF7] text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
+                        : "border-white/20 bg-[#161616] text-zinc-300 hover:text-black hover:bg-white"
+                    }`}
                   >
                     New Topic
                   </button>
@@ -834,6 +850,7 @@ export const App: React.FC = () => {
                   <ChatMessage
                     key={message.id}
                     message={message}
+                    theme={theme}
                     onOpenCitationPage={handleCitationOpen}
                   />
                 ))}
@@ -842,6 +859,7 @@ export const App: React.FC = () => {
                   <div className="py-2">
                     <StreamingIndicator
                       isStreaming={isStreaming}
+                      theme={theme}
                       onStopStream={() => abortControllerRef.current?.abort()}
                     />
                   </div>
@@ -873,10 +891,10 @@ export const App: React.FC = () => {
       {/* MOBILE BOTTOM NAVIGATION BAR (< 768px Phones & Tablets)             */}
       {/* ==================================================================== */}
       <div
-        className={`md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-40 border px-4 py-2 flex items-center gap-4 shadow-[0_10px_35px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors duration-300 ${
+        className={`md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-40 border px-4 py-2 flex items-center gap-4 shadow-[0_10px_35px_rgba(0,0,0,0.85)] backdrop-blur-xl transition-colors duration-300 ${
           isLight
             ? "bg-[#FFF5D6]/95 border-[#4C9DB0]/40 text-[#011936]"
-            : "bg-[#001126]/95 border-[#ED254E]/30 text-slate-100"
+            : "bg-[#0e0e0e]/95 border-white/20 text-white"
         }`}
       >
         <button
@@ -888,7 +906,7 @@ export const App: React.FC = () => {
           className={`btn-tactile w-8 h-8 border flex items-center justify-center ${
             isLight
               ? "bg-[#4C9DB0] text-white border-[#4C9DB0]"
-              : "bg-[#ED254E] text-white border-[#ED254E]"
+              : "bg-white text-black border-white"
           }`}
           title="Home"
         >
@@ -903,7 +921,7 @@ export const App: React.FC = () => {
           className={`btn-tactile p-2 border ${
             isLight
               ? "border-[#4C9DB0]/20 text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
-              : "border-white/10 text-slate-300 hover:text-white hover:border-[#ED254E]"
+              : "border-white/10 text-zinc-300 hover:text-white hover:border-white hover:bg-white/10"
           }`}
           title="PDF Documents"
         >
@@ -918,7 +936,7 @@ export const App: React.FC = () => {
           className={`btn-tactile p-2 border ${
             isLight
               ? "border-[#4C9DB0]/20 text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
-              : "border-white/10 text-slate-300 hover:text-white hover:border-[#ED254E]"
+              : "border-white/10 text-zinc-300 hover:text-white hover:border-white hover:bg-white/10"
           }`}
           title="New Chat"
         >
@@ -933,7 +951,7 @@ export const App: React.FC = () => {
           className={`btn-tactile p-2 border ${
             isLight
               ? "border-[#4C9DB0]/20 text-[#011936] hover:bg-[#4C9DB0] hover:text-white"
-              : "border-white/10 text-slate-300 hover:text-white hover:border-[#ED254E]"
+              : "border-white/10 text-zinc-300 hover:text-white hover:border-white hover:bg-white/10"
           }`}
           title="Chat History"
         >
@@ -948,7 +966,7 @@ export const App: React.FC = () => {
           className={`btn-tactile p-2 border ${
             isLight
               ? "border-[#4C9DB0] bg-[#4C9DB0] text-white"
-              : "border-[#ED254E] bg-[#ED254E]/20 text-[#ED254E]"
+              : "border-white/30 bg-white/10 text-white hover:bg-white hover:text-black"
           }`}
           title={isLight ? "Dark Mode" : "Light Mode"}
         >
@@ -974,7 +992,7 @@ export const App: React.FC = () => {
             className={`w-full max-w-lg border p-6 shadow-2xl space-y-5 animate-scale-up ${
               isLight
                 ? "bg-[#FFFDF7] border-[#4C9DB0] text-[#011936]"
-                : "bg-[#011936] border-[#ED254E]/40 text-slate-100"
+                : "bg-[#0e0e0e] border-white/20 text-white"
             }`}
           >
             <div
@@ -992,7 +1010,7 @@ export const App: React.FC = () => {
                 </h3>
                 <p
                   className={`text-xs ${
-                    isLight ? "text-[#395d6a]" : "text-slate-400"
+                    isLight ? "text-[#395d6a]" : "text-zinc-400"
                   }`}
                 >
                   Select a document to ask questions or upload new PDFs
@@ -1004,7 +1022,7 @@ export const App: React.FC = () => {
                 className={`btn-tactile p-1.5 ${
                   isLight
                     ? "text-[#011936] hover:text-[#4C9DB0]"
-                    : "text-slate-400 hover:text-[#ED254E]"
+                    : "text-zinc-400 hover:text-white"
                 }`}
               >
                 ✕
@@ -1014,6 +1032,7 @@ export const App: React.FC = () => {
             <DocumentUploader
               isUploading={isUploading}
               uploadProgress={uploadProgress}
+              theme={theme}
               onUploadFile={handleUploadFile}
               onValidationError={setErrorMessage}
             />
@@ -1021,7 +1040,7 @@ export const App: React.FC = () => {
             <div className="space-y-2">
               <h4
                 className={`text-xs font-semibold uppercase tracking-wider ${
-                  isLight ? "text-[#4C9DB0]" : "text-slate-400"
+                  isLight ? "text-[#4C9DB0]" : "text-zinc-400"
                 }`}
               >
                 Uploaded PDFs ({documents.length})
@@ -1036,10 +1055,10 @@ export const App: React.FC = () => {
                         isSelected
                           ? isLight
                             ? "bg-[#4C9DB0]/15 border-[#4C9DB0] text-[#011936] font-semibold"
-                            : "bg-[#ED254E]/15 border-[#ED254E] text-white font-semibold"
+                            : "bg-white/15 border-white text-white font-semibold"
                           : isLight
                           ? "bg-[#FFF9E6] border-[#4C9DB0]/20 text-[#011936] hover:border-[#4C9DB0]"
-                          : "bg-[#001126] border-white/5 text-slate-300 hover:border-[#ED254E]/40"
+                          : "bg-[#141414] border-white/10 text-zinc-200 hover:border-white/40"
                       }`}
                     >
                       <button
@@ -1059,6 +1078,7 @@ export const App: React.FC = () => {
                             status={doc.status}
                             pageCount={doc.page_count}
                             errorMessage={doc.processing_error}
+                            theme={theme}
                           />
                         </div>
                       </button>
@@ -1069,7 +1089,7 @@ export const App: React.FC = () => {
                         className={`btn-tactile ml-3 p-1.5 transition-colors ${
                           isLight
                             ? "text-slate-400 hover:text-rose-600"
-                            : "text-slate-500 hover:text-[#ED254E]"
+                            : "text-zinc-500 hover:text-white"
                         }`}
                         title="Delete Document"
                       >
@@ -1093,7 +1113,7 @@ export const App: React.FC = () => {
             className={`w-full max-w-md border p-6 shadow-2xl space-y-4 animate-scale-up ${
               isLight
                 ? "bg-[#FFFDF7] border-[#4C9DB0] text-[#011936]"
-                : "bg-[#011936] border-[#ED254E]/40 text-slate-100"
+                : "bg-[#0e0e0e] border-white/20 text-white"
             }`}
           >
             <div
@@ -1114,7 +1134,7 @@ export const App: React.FC = () => {
                 className={`btn-tactile p-1 ${
                   isLight
                     ? "text-[#011936] hover:text-[#4C9DB0]"
-                    : "text-slate-400 hover:text-[#ED254E]"
+                    : "text-zinc-400 hover:text-white"
                 }`}
               >
                 ✕
@@ -1125,7 +1145,7 @@ export const App: React.FC = () => {
               {conversations.length === 0 ? (
                 <p
                   className={`text-xs p-4 text-center ${
-                    isLight ? "text-[#395d6a]" : "text-slate-400"
+                    isLight ? "text-[#395d6a]" : "text-zinc-400"
                   }`}
                 >
                   No conversation threads for this document yet.
@@ -1143,10 +1163,10 @@ export const App: React.FC = () => {
                       conv.id === activeConvId
                         ? isLight
                           ? "bg-[#4C9DB0]/20 border-[#4C9DB0] text-[#011936] font-semibold"
-                          : "bg-[#ED254E]/20 border-[#ED254E] text-white font-semibold"
+                          : "bg-white/15 border-white text-white font-semibold"
                         : isLight
                         ? "bg-[#FFF9E6] border-[#4C9DB0]/20 text-[#011936] hover:border-[#4C9DB0]"
-                        : "bg-[#001126] border-white/5 text-slate-300 hover:border-[#ED254E]/30"
+                        : "bg-[#141414] border-white/10 text-zinc-300 hover:border-white/30"
                     }`}
                   >
                     <div className="truncate">{conv.title}</div>
@@ -1170,7 +1190,7 @@ export const App: React.FC = () => {
             className={`w-full max-w-md border p-6 shadow-2xl space-y-4 animate-scale-up ${
               isLight
                 ? "bg-[#FFFDF7] border-[#4C9DB0] text-[#011936]"
-                : "bg-[#011936] border-[#ED254E]/40 text-slate-100"
+                : "bg-[#0e0e0e] border-white/20 text-white"
             }`}
           >
             <div
@@ -1191,7 +1211,7 @@ export const App: React.FC = () => {
                 className={`btn-tactile p-1 ${
                   isLight
                     ? "text-[#011936] hover:text-[#4C9DB0]"
-                    : "text-slate-400 hover:text-[#ED254E]"
+                    : "text-zinc-400 hover:text-white"
                 }`}
               >
                 ✕
@@ -1200,21 +1220,21 @@ export const App: React.FC = () => {
 
             <div
               className={`space-y-3 text-xs ${
-                isLight ? "text-[#011936]" : "text-slate-300"
+                isLight ? "text-[#011936]" : "text-zinc-300"
               }`}
             >
               <div
                 className={`flex items-center justify-between p-3 border ${
                   isLight
                     ? "bg-[#FFF9E6] border-[#4C9DB0]/30"
-                    : "bg-[#001126] border-white/10"
+                    : "bg-[#141414] border-white/10"
                 }`}
               >
                 <div>
                   <div className="font-semibold">Citation Strictness</div>
                   <div
                     className={`text-[11px] ${
-                      isLight ? "text-[#395d6a]" : "text-slate-500"
+                      isLight ? "text-[#395d6a]" : "text-zinc-500"
                     }`}
                   >
                     Verify against stored chunk metadata
@@ -1224,7 +1244,7 @@ export const App: React.FC = () => {
                   className={`px-2.5 py-1 border font-bold ${
                     isLight
                       ? "bg-[#4C9DB0]/15 border-[#4C9DB0] text-[#4C9DB0]"
-                      : "bg-[#ED254E]/15 border-[#ED254E] text-[#ED254E]"
+                      : "bg-white/15 border-white text-white"
                   }`}
                 >
                   Active
@@ -1235,14 +1255,14 @@ export const App: React.FC = () => {
                 className={`flex items-center justify-between p-3 border ${
                   isLight
                     ? "bg-[#FFF9E6] border-[#4C9DB0]/30"
-                    : "bg-[#001126] border-white/10"
+                    : "bg-[#141414] border-white/10"
                 }`}
               >
                 <div>
                   <div className="font-semibold">Offline Fallback</div>
                   <div
                     className={`text-[11px] ${
-                      isLight ? "text-[#395d6a]" : "text-slate-500"
+                      isLight ? "text-[#395d6a]" : "text-zinc-500"
                     }`}
                   >
                     Deterministic local n-gram vectors
@@ -1252,7 +1272,7 @@ export const App: React.FC = () => {
                   className={`px-2.5 py-1 border font-bold ${
                     isLight
                       ? "bg-[#4C9DB0]/10 border-[#4C9DB0]/40 text-[#4C9DB0]"
-                      : "bg-white/10 border-white/20 text-slate-200"
+                      : "bg-white/10 border-white/20 text-white"
                   }`}
                 >
                   Auto
@@ -1263,14 +1283,14 @@ export const App: React.FC = () => {
                 className={`flex items-center justify-between p-3 border ${
                   isLight
                     ? "bg-[#FFF9E6] border-[#4C9DB0]/30"
-                    : "bg-[#001126] border-white/10"
+                    : "bg-[#141414] border-white/10"
                 }`}
               >
                 <div>
                   <div className="font-semibold">Chunking Window</div>
                   <div
                     className={`text-[11px] ${
-                      isLight ? "text-[#395d6a]" : "text-slate-500"
+                      isLight ? "text-[#395d6a]" : "text-zinc-500"
                     }`}
                   >
                     800 chars / 150 overlap (Sentence-snapped)
@@ -1293,6 +1313,7 @@ export const App: React.FC = () => {
           pageCount={selectedDocument.page_count}
           activePage={viewerPage}
           activeCitation={viewerCitation}
+          theme={theme}
           onSelectPage={(newPage) => setViewerPage(newPage)}
           onClose={() => {
             setViewerPage(null);

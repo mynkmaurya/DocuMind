@@ -55,8 +55,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               ? "bg-[#FFFDF7] border-[#4C9DB0] shadow-[0_20px_50px_rgba(76,157,176,0.25)]"
               : "bg-[#FFF9E6]/95 border-[#4C9DB0]/40 shadow-[0_15px_40px_rgba(76,157,176,0.15)]"
             : isFocused
-            ? "bg-[#011936] border-[#ED254E] shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_30px_rgba(237,37,78,0.3)]"
-            : "bg-[#011936]/90 border-[#ED254E]/30 shadow-[0_20px_50px_rgba(0,0,0,0.75)]"
+            ? "bg-[#141414] border-white shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_30px_rgba(255,255,255,0.18)]"
+            : "bg-[#121212]/95 border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.85)]"
         }`}
       >
         {/* Top banner: Unlock more features with Pro + Explore Pro ↗ */}
@@ -64,16 +64,16 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           className={`flex items-center justify-between px-4 pt-2.5 pb-2 text-[11px] sm:text-xs font-medium border-b ${
             isLight
               ? "border-[#4C9DB0]/20 text-[#011936]"
-              : "border-white/5 text-slate-300"
+              : "border-white/10 text-zinc-300"
           }`}
         >
           <div className="flex items-center gap-1.5">
-            <span className={isLight ? "text-[#4C9DB0]" : "text-[#ED254E]"}>
+            <span className={isLight ? "text-[#4C9DB0]" : "text-white"}>
               ✦
             </span>
             <span
               className={`font-semibold ${
-                isLight ? "text-[#011936]" : "text-slate-200"
+                isLight ? "text-[#011936]" : "text-zinc-200"
               }`}
             >
               {activeDocumentName
@@ -87,7 +87,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             className={`flex items-center gap-1 text-[11px] transition-colors ${
               isLight
                 ? "text-[#4C9DB0] hover:text-[#2d6774] font-medium"
-                : "text-slate-400 hover:text-[#ED254E]"
+                : "text-zinc-400 hover:text-white"
             }`}
           >
             <span>Explore Pro</span>
@@ -101,7 +101,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           className={`border p-3 sm:p-4 transition-colors duration-200 ${
             isLight
               ? "bg-[#FFFFFF] border-[#4C9DB0]/20"
-              : "bg-[#001126] border-white/5"
+              : "bg-[#0a0a0a] border-white/10"
           }`}
         >
           <label htmlFor="documind-question-input" className="sr-only">
@@ -130,14 +130,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             className={`w-full resize-none bg-transparent px-2 pt-1 pb-2 text-sm sm:text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 min-h-[40px] transition-all ${
               isLight
                 ? "text-[#011936] placeholder:text-[#4C9DB0]/60"
-                : "text-slate-100 placeholder:text-slate-500"
+                : "text-white placeholder:text-zinc-500"
             }`}
           />
 
           {/* Bottom toolbar inside input box */}
           <div
             className={`flex items-center justify-between pt-2 border-t mt-1 ${
-              isLight ? "border-[#4C9DB0]/20" : "border-white/5"
+              isLight ? "border-[#4C9DB0]/20" : "border-white/10"
             }`}
           >
             {/* Left buttons: Import file & Tools */}
@@ -148,12 +148,12 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 className={`btn-tactile inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-medium transition-all focus:outline-none ${
                   isLight
                     ? "border-[#4C9DB0]/40 bg-[#FFEBAF] hover:bg-[#4C9DB0] text-[#011936] hover:text-white"
-                    : "border-[#ED254E]/30 bg-[#011936] hover:border-[#ED254E] text-slate-200 hover:text-white"
+                    : "border-white/20 bg-[#161616] hover:bg-white hover:text-black hover:border-white text-zinc-200"
                 }`}
               >
                 <svg
                   className={`w-3.5 h-3.5 ${
-                    isLight ? "text-[#4C9DB0]" : "text-slate-400"
+                    isLight ? "text-[#4C9DB0]" : "text-zinc-400 group-hover:text-black"
                   }`}
                   fill="none"
                   viewBox="0 0 24 24"
@@ -175,12 +175,12 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 className={`btn-tactile inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-medium transition-all focus:outline-none ${
                   isLight
                     ? "border-[#4C9DB0]/40 bg-[#FFEBAF] hover:bg-[#4C9DB0] text-[#011936] hover:text-white"
-                    : "border-[#ED254E]/30 bg-[#011936] hover:border-[#ED254E] text-slate-200 hover:text-white"
+                    : "border-white/20 bg-[#161616] hover:bg-white hover:text-black hover:border-white text-zinc-200"
                 }`}
               >
                 <svg
                   className={`w-3.5 h-3.5 ${
-                    isLight ? "text-[#4C9DB0]" : "text-slate-400"
+                    isLight ? "text-[#4C9DB0]" : "text-zinc-400 group-hover:text-black"
                   }`}
                   fill="none"
                   viewBox="0 0 24 24"
@@ -206,7 +206,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 className={`flex items-center gap-1 text-xs transition-colors p-1 ${
                   isLight
                     ? "text-[#4C9DB0] hover:text-[#011936]"
-                    : "text-slate-400 hover:text-[#ED254E]"
+                    : "text-zinc-400 hover:text-white"
                 }`}
               >
                 <span className="text-sm">✦</span>
@@ -225,10 +225,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                           ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_15px_rgba(76,157,176,0.6)]"
                           : "opacity-40 cursor-not-allowed scale-100"
                       }`
-                    : `bg-[#ED254E] hover:bg-[#ff3b64] text-white border-[#ED254E] ${
+                    : `bg-white hover:bg-zinc-200 text-black border-white ${
                         hasContent && !disabled
-                          ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_20px_rgba(237,37,78,0.7)]"
-                          : "opacity-40 cursor-not-allowed scale-100"
+                          ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.6)]"
+                          : "opacity-30 cursor-not-allowed scale-100"
                       }`
                 }`}
               >
