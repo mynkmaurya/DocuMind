@@ -7,7 +7,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-[#03060a] text-slate-100 antialiased selection:bg-cyan-500 selection:text-white;
+    @apply bg-[#06080d] text-slate-100 antialiased selection:bg-slate-300 selection:text-slate-950;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
@@ -19,11 +19,11 @@
 @keyframes orb-float {
   0%, 100% {
     transform: translateY(0px) scale(1);
-    filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.45)) drop-shadow(0 0 70px rgba(139, 92, 246, 0.35));
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.25)) drop-shadow(0 0 50px rgba(148, 163, 184, 0.2));
   }
   50% {
-    transform: translateY(-8px) scale(1.025);
-    filter: drop-shadow(0 0 50px rgba(56, 189, 248, 0.65)) drop-shadow(0 0 95px rgba(236, 72, 153, 0.45));
+    transform: translateY(-8px) scale(1.02);
+    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 75px rgba(203, 213, 225, 0.25));
   }
 }
 
@@ -96,10 +96,10 @@
 
 @keyframes subtle-glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
   }
   50% {
-    box-shadow: 0 0 30px rgba(56, 189, 248, 0.5), 0 0 50px rgba(14, 165, 233, 0.3);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3), 0 0 50px rgba(148, 163, 184, 0.2);
   }
 }
 
@@ -157,22 +157,20 @@
   animation-delay: 0.24s;
 }
 
-/* Ambient gradient background matching the screenshot */
+/* Ambient gradient background matching the liquid chrome mockup */
 .lix-bg-gradient {
-  background: radial-gradient(circle at 100% 100%, rgba(13, 52, 62, 0.5) 0%, transparent 50%),
-              radial-gradient(circle at 0% 100%, rgba(9, 36, 44, 0.4) 0%, transparent 45%),
-              radial-gradient(circle at 50% 10%, rgba(16, 30, 48, 0.4) 0%, transparent 60%),
-              #060a0f;
+  background: radial-gradient(circle at 50% 22%, rgba(22, 30, 46, 0.48) 0%, rgba(9, 13, 20, 0.88) 50%, #06080d 90%),
+              #06080d;
   background-attachment: fixed;
 }
 
 /* Dark glassmorphic panels */
 .lix-glass-card {
-  background: rgba(12, 24, 34, 0.75);
+  background: rgba(13, 17, 26, 0.78);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(20, 184, 166, 0.18);
-  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
   transform: translateZ(0);
 }
 
@@ -182,10 +180,10 @@
 }
 
 .lix-glass-card-hover:hover {
-  background: rgba(16, 32, 45, 0.92);
-  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(18, 24, 38, 0.92);
+  border-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-4px);
-  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.75), 0 0 25px 0 rgba(56, 189, 248, 0.18);
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8), 0 0 25px 0 rgba(255, 255, 255, 0.1);
 }
 
 .lix-glass-card-hover:active {

@@ -301,7 +301,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="flex flex-col items-center gap-3.5 w-full">
-              {/* Active Home Button: Vibrant Cyan Circle from Mockup */}
+              {/* Active Home Button: Glossy Liquid Chrome from Figma */}
               <button
                 type="button"
                 onClick={() => {
@@ -309,7 +309,7 @@ export const App: React.FC = () => {
                   setViewerPage(null);
                 }}
                 title="Home / Overview"
-                className="btn-tactile w-10 h-10 rounded-full bg-gradient-to-tr from-[#0284c7] via-[#0ea5e9] to-[#38bdf8] text-white flex items-center justify-center shadow-[0_0_16px_rgba(56,189,248,0.55)] border border-cyan-300/40"
+                className="btn-tactile w-10 h-10 rounded-full bg-gradient-to-b from-white via-slate-100 to-slate-300 text-slate-900 flex items-center justify-center shadow-[0_2px_12px_rgba(255,255,255,0.35)] border border-white/80"
               >
                 <svg
                   className="w-5 h-5 fill-current"
@@ -319,15 +319,41 @@ export const App: React.FC = () => {
                 </svg>
               </button>
 
-              {/* History / Clock Icon Button */}
+              {/* Document Manager Button: Circular Outline */}
+              <button
+                type="button"
+                onClick={() => setShowDocumentsModal((v) => !v)}
+                title="Documents & Uploads"
+                className={`btn-tactile w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
+                  showDocumentsModal
+                    ? "border-white/40 bg-white/10 text-white"
+                    : "border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5"
+                }`}
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </button>
+
+              {/* History / Clock Icon Button: Circular Outline */}
               <button
                 type="button"
                 onClick={() => setShowHistoryModal((v) => !v)}
                 title="Chat History"
                 className={`btn-tactile w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
                   showHistoryModal
-                    ? "border-cyan-400/50 bg-cyan-950/40 text-cyan-300"
-                    : "border-white/10 bg-[#0d1620]/60 text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5"
+                    ? "border-white/40 bg-white/10 text-white"
+                    : "border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5"
                 }`}
               >
                 <svg
@@ -345,12 +371,12 @@ export const App: React.FC = () => {
                 </svg>
               </button>
 
-              {/* Chat / Messages Button */}
+              {/* New Chat Button: Circular Outline (+) */}
               <button
                 type="button"
                 onClick={handleCreateConversation}
                 title="New Chat Session"
-                className="btn-tactile w-10 h-10 rounded-full border border-white/10 bg-[#0d1620]/60 text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5 flex items-center justify-center transition-all"
+                className="btn-tactile w-10 h-10 rounded-full border border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5 flex items-center justify-center transition-all"
               >
                 <svg
                   className="w-4 h-4"
@@ -362,33 +388,7 @@ export const App: React.FC = () => {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </button>
-
-              {/* Document Manager Button */}
-              <button
-                type="button"
-                onClick={() => setShowDocumentsModal((v) => !v)}
-                title="Documents & Uploads"
-                className={`btn-tactile w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
-                  showDocumentsModal
-                    ? "border-cyan-400/50 bg-cyan-950/40 text-cyan-300"
-                    : "border-white/10 bg-[#0d1620]/60 text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/5"
-                }`}
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    d="M12 4v16m8-8H4"
                   />
                 </svg>
               </button>
@@ -424,10 +424,10 @@ export const App: React.FC = () => {
               </svg>
             </button>
 
-            {/* Theme / Moon Toggle Icon from Mockup */}
+            {/* Theme / Moon Toggle Icon from Figma */}
             <button
               type="button"
-              title="Dark mode active"
+              title="Dark mode"
               className="btn-tactile w-9 h-9 rounded-full text-slate-400 hover:text-white flex items-center justify-center transition-colors"
             >
               <svg
@@ -445,15 +445,13 @@ export const App: React.FC = () => {
               </svg>
             </button>
 
-            {/* User Profile Avatar with Hendricks portrait style */}
+            {/* User Profile Avatar with sleek silver ring */}
             <div
               title="Logged in as Hendricks"
-              className="w-9 h-9 rounded-full p-[1.5px] bg-gradient-to-tr from-amber-500/80 via-cyan-400/80 to-purple-500/80 shadow-md select-none cursor-pointer btn-tactile overflow-hidden"
+              className="w-9 h-9 rounded-full p-[1.5px] border border-white/30 shadow-md select-none cursor-pointer btn-tactile overflow-hidden bg-slate-800"
             >
-              <div className="w-full h-full rounded-full bg-[#131b26] flex items-center justify-center text-xs font-bold text-amber-200">
-                <span className="bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-transparent font-extrabold">
-                  H
-                </span>
+              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xs font-bold text-slate-200">
+                H
               </div>
             </div>
           </div>
@@ -464,7 +462,7 @@ export const App: React.FC = () => {
         {/* ==================================================================== */}
         <div className="flex-1 flex flex-col justify-between min-h-screen md:min-h-0 relative overflow-y-auto">
           {/* Top Header Bar */}
-          <header className="w-full flex items-center justify-between px-5 sm:px-8 md:px-10 py-4 text-xs text-slate-400 z-20">
+          <header className="w-full flex items-center justify-between px-5 sm:px-8 md:px-10 py-5 text-xs text-slate-400 z-20">
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-white tracking-widest text-sm md:hidden">
                 LIX
@@ -472,7 +470,7 @@ export const App: React.FC = () => {
               <span className="font-semibold text-white tracking-tight text-sm">
                 DocuMind
               </span>
-              <span className="text-[10px] font-bold text-cyan-400 bg-cyan-950/50 border border-cyan-800/40 px-2 py-0.5 rounded-full tracking-wider">
+              <span className="text-[10px] font-bold text-slate-300 bg-white/10 border border-white/15 px-2 py-0.5 rounded-full tracking-wider">
                 BETA
               </span>
             </div>
@@ -481,8 +479,8 @@ export const App: React.FC = () => {
               onClick={() => setShowDocumentsModal(true)}
               className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer select-none bg-white/5 md:bg-transparent px-3 py-1 md:p-0 rounded-full border border-white/5 md:border-0"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-              <span className="font-medium">Personal workspace</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+              <span className="font-medium text-slate-300">Personal workspace</span>
               <span className="text-[10px] text-slate-500">▾</span>
             </div>
           </header>
@@ -552,34 +550,34 @@ export const App: React.FC = () => {
                   className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm text-cyan-400">💬</span>
-                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-cyan-200 transition-colors">
+                    <span className="text-sm text-slate-300">💬</span>
+                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-slate-200 transition-colors">
                       Surprise me!
                     </span>
                   </div>
                   <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
-                    Surprise me with a creative idea or story.
+                    Surprise me with a creative idea or key insights.
                   </p>
                 </button>
 
-                {/* Card 2: Create image */}
+                {/* Card 2: Inspect citations */}
                 <button
                   type="button"
                   onClick={() =>
                     handleSendQuestion(
-                      "Create an image prompt and visual description representing the core concepts of this document."
+                      "What are the most critical sections and exact page citations in this document?"
                     )
                   }
                   className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm text-cyan-400">👤</span>
-                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-cyan-200 transition-colors">
-                      Create image
+                    <span className="text-sm text-slate-300">👤</span>
+                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-slate-200 transition-colors">
+                      Inspect citations
                     </span>
                   </div>
                   <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
-                    Create an image from your idea or prompt.
+                    Verify source evidence with grounded page numbers.
                   </p>
                 </button>
 
@@ -594,8 +592,8 @@ export const App: React.FC = () => {
                   className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between group cursor-pointer"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm text-cyan-400">📄</span>
-                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-cyan-200 transition-colors">
+                    <span className="text-sm text-slate-300">📄</span>
+                    <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-slate-200 transition-colors">
                       Summarise
                     </span>
                   </div>
@@ -691,7 +689,7 @@ export const App: React.FC = () => {
             setMessages([]);
             setViewerPage(null);
           }}
-          className="btn-tactile w-9 h-9 rounded-full bg-gradient-to-tr from-[#0284c7] via-[#0ea5e9] to-[#38bdf8] text-white flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.6)]"
+          className="btn-tactile w-9 h-9 rounded-full bg-gradient-to-b from-white via-slate-100 to-slate-300 text-slate-900 flex items-center justify-center shadow-[0_2px_10px_rgba(255,255,255,0.35)] border border-white/80"
         >
           <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />

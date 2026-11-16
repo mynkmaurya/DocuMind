@@ -11,7 +11,7 @@ interface MessageInputProps {
 
 export const MessageInput: React.FC<MessageInputProps> = ({
   disabled,
-  placeholder = "Ask me anything ...",
+  placeholder = "Ask me anything...",
   activeDocumentName,
   onSendQuestion,
   onOpenUploadModal,
@@ -43,18 +43,18 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
   return (
     <div className="w-full max-w-2xl mx-auto transition-transform duration-300">
-      {/* Outer container card with glowing border highlight matching the design */}
+      {/* Outer container card with metallic chrome border highlight matching Figma */}
       <div
-        className={`relative rounded-3xl p-1 bg-gradient-to-b from-[#0e1d28]/95 via-[#0b1720]/95 to-[#070e15]/98 border transition-all duration-300 backdrop-blur-2xl ${
+        className={`relative rounded-3xl p-1 bg-gradient-to-b from-[#141a27]/90 via-[#0e131e]/95 to-[#080b12]/98 border transition-all duration-300 backdrop-blur-2xl ${
           isFocused
-            ? "border-cyan-500/40 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(56,189,248,0.2)] scale-[1.006]"
-            : "border-teal-500/20 shadow-[0_20px_50px_rgba(0,0,0,0.7)]"
+            ? "border-white/30 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(255,255,255,0.12)] scale-[1.006]"
+            : "border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.75)]"
         }`}
       >
-        {/* Top banner: Unlock more features with Pro */}
+        {/* Top banner: Unlock more features with Pro + Explore Pro ↗ */}
         <div className="flex items-center justify-between px-4 pt-2.5 pb-2 text-[11px] sm:text-xs font-medium text-slate-300">
           <div className="flex items-center gap-1.5 text-slate-200">
-            <span className="text-cyan-400">✦</span>
+            <span className="text-white/80">✦</span>
             <span className="font-semibold text-slate-200">
               {activeDocumentName
                 ? `Grounded on: ${activeDocumentName}`
@@ -64,17 +64,17 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           <button
             type="button"
             onClick={onOpenToolsModal}
-            className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-cyan-300 transition-colors"
+            className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white transition-colors"
           >
             <span>Explore Pro</span>
-            <span>↗</span>
+            <span className="text-[12px]">↗</span>
           </button>
         </div>
 
         {/* Inner dark input area */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl bg-[#060b10] border border-white/5 p-3 sm:p-4 transition-colors duration-200"
+          className="rounded-2xl bg-[#070a10] border border-white/5 p-3 sm:p-4 transition-colors duration-200"
         >
           <label htmlFor="documind-question-input" className="sr-only">
             Ask me anything
@@ -89,7 +89,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             onBlur={() => setIsFocused(false)}
             placeholder={
               activeDocumentName
-                ? `Ask about ${activeDocumentName} ...`
+                ? `Ask about ${activeDocumentName}...`
                 : placeholder
             }
             onChange={handleInput}
@@ -104,12 +104,12 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
           {/* Bottom toolbar inside input box */}
           <div className="flex items-center justify-between pt-2 border-t border-white/5 mt-1">
-            {/* Left buttons: Import file & Tools */}
+            {/* Left buttons: Import file & Tools matching Figma capsule style */}
             <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
                 onClick={onOpenUploadModal}
-                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#101b24]/90 hover:bg-[#162533] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-all focus:outline-none"
+                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#121724]/90 hover:bg-[#1a2234] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-all focus:outline-none"
               >
                 <svg
                   className="w-3.5 h-3.5 text-slate-400"
@@ -130,7 +130,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               <button
                 type="button"
                 onClick={onOpenToolsModal}
-                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#101b24]/90 hover:bg-[#162533] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-all focus:outline-none"
+                className="btn-tactile inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#121724]/90 hover:bg-[#1a2234] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-all focus:outline-none"
               >
                 <svg
                   className="w-3.5 h-3.5 text-slate-400"
@@ -142,14 +142,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
                   />
                 </svg>
                 <span>Tools</span>
               </button>
             </div>
 
-            {/* Right buttons: Sparkle Model dropdown & Vivid Cyan Send Button */}
+            {/* Right buttons: Sparkle Model dropdown & Glossy Liquid Chrome Send Button */}
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -161,19 +161,19 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 <span className="text-[10px]">▾</span>
               </button>
 
-              {/* Vivid Cyan Circular Send Button matching the design */}
+              {/* Glossy Liquid Chrome Circular Send Button matching Figma */}
               <button
                 type="submit"
                 disabled={disabled || !hasContent}
                 aria-label="Send question"
-                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-[#0284c7] via-[#0ea5e9] to-[#38bdf8] hover:from-[#0369a1] hover:to-[#0284c7] active:scale-90 text-white flex items-center justify-center font-black transition-all duration-200 shadow-[0_0_15px_rgba(56,189,248,0.5)] border border-cyan-300/40 ${
+                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-slate-300 via-white to-slate-400 hover:from-white hover:to-slate-200 active:scale-90 text-slate-950 flex items-center justify-center font-black transition-all duration-200 shadow-[0_2px_12px_rgba(255,255,255,0.4)] border border-white/80 ${
                   hasContent && !disabled
-                    ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_22px_rgba(56,189,248,0.8)]"
-                    : "opacity-40 cursor-not-allowed scale-100"
+                    ? "opacity-100 scale-105 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.6)]"
+                    : "opacity-50 cursor-not-allowed scale-100"
                 }`}
               >
                 <svg
-                  className="w-4 h-4 stroke-[3]"
+                  className="w-4 h-4 stroke-[2.8]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

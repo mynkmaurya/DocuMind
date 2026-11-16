@@ -462,7 +462,7 @@ export const IridescentOrb: React.FC<{
   isStreaming?: boolean;
 }> = ({ size = "md", className = "", isStreaming = false }) => {
   const sizeClasses = {
-    sm: "w-24 h-24 sm:w-28 sm:h-28",
+    sm: "w-20 h-20 sm:w-24 sm:h-24",
     md: "w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48",
     lg: "w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60",
   }[size];
@@ -473,51 +473,54 @@ export const IridescentOrb: React.FC<{
       aria-hidden="true"
     >
       <div
-        className={`absolute inset-0 rounded-full blur-2xl opacity-70 transition-all duration-700 pointer-events-none ${
+        className={`absolute inset-0 rounded-full blur-2xl opacity-60 transition-all duration-700 pointer-events-none ${
           isStreaming ? "scale-125 opacity-90 blur-3xl" : "scale-105"
         }`}
         style={{
           background:
-            "radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(139, 92, 246, 0.35) 45%, rgba(236, 72, 153, 0.2) 70%, transparent 85%)",
+            "radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(148, 163, 184, 0.18) 45%, rgba(51, 65, 85, 0.12) 70%, transparent 85%)",
         }}
       />
-      <div className="relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_-12px_24px_rgba(0,0,0,0.85),0_15px_35px_rgba(0,0,0,0.9)] animate-orb-float border border-white/10">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(circle at 45% 40%, #0d1629 0%, #050811 75%, #020307 100%)",
-          }}
-        />
-        <div
-          className="absolute -inset-1/2 rounded-full opacity-85 mix-blend-screen filter blur-md animate-orb-swirl"
-          style={{
-            background:
-              "conic-gradient(from 180deg at 50% 50%, #38bdf8 0deg, #818cf8 90deg, #ec4899 180deg, #f59e0b 260deg, #38bdf8 360deg)",
-          }}
-        />
-        <div
-          className="absolute -inset-1/3 rounded-full opacity-75 mix-blend-color-dodge filter blur-lg animate-orb-swirl [animation-direction:reverse] [animation-duration:18s]"
-          style={{
-            background:
-              "conic-gradient(from 45deg at 50% 50%, #06b6d4 0deg, #3b82f6 120deg, #a855f7 220deg, #ec4899 300deg, #06b6d4 360deg)",
-          }}
-        />
-        <div
-          className="absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full mix-blend-lighten filter blur-sm animate-orb-pulse"
-          style={{
-            background:
-              "radial-gradient(circle at 40% 40%, rgba(254, 240, 138, 0.85) 0%, rgba(249, 115, 22, 0.65) 35%, rgba(139, 92, 246, 0.45) 70%, transparent 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 rounded-full pointer-events-none"
-          style={{
-            boxShadow:
-              "inset 0 0 40px rgba(0, 0, 0, 0.85), inset 0 -15px 30px rgba(0, 0, 0, 0.9), inset 0 2px 8px rgba(255, 255, 255, 0.35)",
-          }}
-        />
-        <div className="absolute top-2 left-6 right-6 h-10 rounded-full bg-gradient-to-b from-white/35 to-transparent blur-[1.5px] pointer-events-none" />
+      <div className="relative w-full h-full rounded-full p-1.5 bg-gradient-to-b from-white/40 via-slate-600/60 to-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.95)]">
+        <div className="relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_-16px_32px_rgba(0,0,0,0.95),inset_0_4px_14px_rgba(255,255,255,0.45)] animate-orb-float border border-white/20">
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(circle at 45% 35%, #1e2638 0%, #0d121c 55%, #030508 100%)",
+            }}
+          />
+          <div
+            className="absolute -inset-1/2 rounded-full opacity-85 mix-blend-screen filter blur-md animate-orb-swirl"
+            style={{
+              background:
+                "conic-gradient(from 180deg at 50% 50%, #ffffff 0deg, #94a3b8 50deg, #1e293b 110deg, #ffffff 170deg, #cbd5e1 240deg, #0f172a 300deg, #ffffff 360deg)",
+            }}
+          />
+          <div
+            className="absolute -inset-1/3 rounded-full opacity-75 mix-blend-color-dodge filter blur-lg animate-orb-swirl [animation-direction:reverse] [animation-duration:16s]"
+            style={{
+              background:
+                "conic-gradient(from 45deg at 50% 50%, #f8fafc 0deg, #64748b 80deg, #ffffff 160deg, #334155 240deg, #e2e8f0 310deg, #f8fafc 360deg)",
+            }}
+          />
+          <div
+            className="absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full mix-blend-lighten filter blur-sm animate-orb-pulse"
+            style={{
+              background:
+                "radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.98) 0%, rgba(226, 232, 240, 0.75) 35%, rgba(148, 163, 184, 0.35) 75%, transparent 100%)",
+            }}
+          />
+          <div
+            className="absolute inset-0 rounded-full pointer-events-none"
+            style={{
+              boxShadow:
+                "inset 0 0 45px rgba(0, 0, 0, 0.95), inset 0 -18px 30px rgba(0, 0, 0, 0.98), inset 0 2px 10px rgba(255, 255, 255, 0.6)",
+            }}
+          />
+          <div className="absolute top-1.5 left-5 right-5 h-7 rounded-full bg-gradient-to-b from-white/75 via-white/25 to-transparent blur-[1px] pointer-events-none" />
+          <div className="absolute bottom-1.5 left-7 right-7 h-2 rounded-full bg-gradient-to-t from-white/30 to-transparent blur-[1px] pointer-events-none" />
+        </div>
       </div>
     </div>
   );
@@ -707,7 +710,7 @@ export const MessageInput: React.FC<{
             <button
               type="submit"
               disabled={disabled || !question.trim()}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0098ea] hover:bg-[#0089d4] active:scale-95 disabled:opacity-40 text-white flex items-center justify-center font-bold shadow-[0_0_15px_rgba(0,152,234,0.4)] transition-all"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-slate-300 via-white to-slate-400 hover:from-white hover:to-slate-200 active:scale-90 disabled:opacity-40 text-slate-950 flex items-center justify-center font-bold shadow-[0_2px_12px_rgba(255,255,255,0.4)] border border-white/80 transition-all"
             >
               ↑
             </button>
@@ -903,23 +906,34 @@ export const App: React.FC = () => {
                 setMessages([]);
                 setViewerPage(null);
               }}
-              className="w-10 h-10 rounded-2xl bg-[#0098ea] hover:bg-[#0089d4] text-white flex items-center justify-center shadow-[0_0_15px_rgba(0,152,234,0.4)]"
+              title="Home / Overview"
+              className="w-10 h-10 rounded-full bg-gradient-to-b from-white via-slate-100 to-slate-300 text-slate-900 flex items-center justify-center shadow-[0_2px_12px_rgba(255,255,255,0.35)] border border-white/80"
             >
               ⌂
             </button>
             <button
               type="button"
               onClick={() => setShowDocumentsModal((v) => !v)}
-              className="w-10 h-10 rounded-2xl bg-slate-800/60 text-slate-400 hover:text-white flex items-center justify-center"
+              title="Documents & Uploads"
+              className="w-10 h-10 rounded-full border border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 flex items-center justify-center transition-all"
             >
               📄
             </button>
             <button
               type="button"
               onClick={() => setShowHistoryModal((v) => !v)}
-              className="w-10 h-10 rounded-2xl bg-slate-800/60 text-slate-400 hover:text-white flex items-center justify-center"
+              title="Chat History"
+              className="w-10 h-10 rounded-full border border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 flex items-center justify-center transition-all"
             >
               🕒
+            </button>
+            <button
+              type="button"
+              onClick={() => handleCreateConversation()}
+              title="New Chat Session"
+              className="w-10 h-10 rounded-full border border-white/10 bg-transparent text-slate-400 hover:text-white hover:border-white/30 flex items-center justify-center transition-all"
+            >
+              +
             </button>
           </div>
         </div>
@@ -1000,11 +1014,11 @@ export const App: React.FC = () => {
                 className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
               >
                 <div className="flex items-center gap-2 mb-2 font-semibold text-white">
-                  <span className="text-cyan-400">💬</span>
+                  <span className="text-slate-300">💬</span>
                   <span>Surprise me!</span>
                 </div>
                 <p className="text-xs text-slate-400">
-                  Surprise me with a creative idea or story.
+                  Surprise me with a creative idea or key insights.
                 </p>
               </button>
 
@@ -1012,17 +1026,17 @@ export const App: React.FC = () => {
                 type="button"
                 onClick={() =>
                   handleSendQuestion(
-                    "Create an image prompt and visual description representing the core concepts of this document."
+                    "What are the most critical sections and exact page citations in this document?"
                   )
                 }
                 className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
               >
                 <div className="flex items-center gap-2 mb-2 font-semibold text-white">
-                  <span className="text-cyan-400">👤</span>
-                  <span>Create image</span>
+                  <span className="text-slate-300">👤</span>
+                  <span>Inspect citations</span>
                 </div>
                 <p className="text-xs text-slate-400">
-                  Create an image from your idea or prompt.
+                  Verify source evidence with grounded page numbers.
                 </p>
               </button>
 
@@ -1036,13 +1050,18 @@ export const App: React.FC = () => {
                 className="lix-glass-card lix-glass-card-hover rounded-2xl p-4 text-left flex flex-col justify-between"
               >
                 <div className="flex items-center gap-2 mb-2 font-semibold text-white">
-                  <span className="text-cyan-400">📄</span>
+                  <span className="text-slate-300">📄</span>
                   <span>Summarise</span>
                 </div>
                 <p className="text-xs text-slate-400">
                   Summarise a document or text in seconds.
                 </p>
               </button>
+            </div>
+
+            <div className="mt-8 flex items-center justify-center gap-1.5 text-[11px] text-slate-500 font-normal">
+              <span>🔒</span>
+              <span>Your ideas stay yours. Private, secure, and grounded in your documents.</span>
             </div>
           </div>
         ) : (
